@@ -1262,7 +1262,227 @@ function triggerConfetti() {
     }
 }
 
-// Run check on load
+// AI Assistant (Peter) Logic
+// AI Assistant (Peter) Logic
+const aiFamiliar = {
+    container: document.getElementById('aiFamiliar'),
+    orb: document.querySelector('.familiar-orb'),
+    core: document.querySelector('.familiar-core'),
+    eyes: document.querySelectorAll('.eye'),
+    dialogue: document.getElementById('familiarDialogue'),
+    text: document.querySelector('.dialogue-text'),
+    dots: document.querySelector('.typing-dots'),
+
+    isVisible: false,
+    idleTimer: null,
+
+    messages: [
+        "I'm Peter! At your service. ⚡",
+        "Wow, did you see that animation? Cool right? 😎",
+        "I'm keeping an eye on the code... literally! 👀",
+        "Need a tour? I know this place inside out! 🗺️",
+        "BhuuX is a wizard, and I'm his apprentice! 🧙‍♂️",
+        "Hey! Down here! I have secrets to share... 🤫",
+        "Is it just me, or is this portfolio looking sharp? ✨"
+    ],
+
+    init() {
+        if (!this.orb) return;
+
+        // Create Summon Button
+        this.createSummonButton();
+
+        // Initially hidden
+        this.container.classList.add('hidden');
+
+        // Random interactions (More frequent)
+        setInterval(() => {
+            if (this.isVisible && Math.random() > 0.6 && !this.isSpeaking) {
+                this.speak(this.messages[Math.floor(Math.random() * this.messages.length)]);
+                this.happyJump();
+            }
+        }, 8000);
+
+        // Eye Tracking
+        document.addEventListener('mousemove', (e) => {
+            if (this.isVisible) this.trackEyes(e.clientX, e.clientY);
+            this.resetIdleTimer();
+        });
+
+        // Click interaction
+        this.orb.addEventListener('click', () => {
+            this.speak("You poked me! Hehe. How can I help? 🤖");
+            this.happyJump();
+            this.playRobotSound('chirp');
+        });
+
+        // Hover effects
+        this.orb.addEventListener('mouseenter', () => {
+            this.orb.style.transform = 'scale(1.1) rotate(10deg)';
+            this.eyes.forEach(eye => eye.style.height = '2px'); // Squint/Happy eyes
+            this.playRobotSound('hover');
+        });
+
+        this.orb.addEventListener('mouseleave', () => {
+            this.orb.style.transform = 'scale(1) rotate(0deg)';
+            this.eyes.forEach(eye => eye.style.height = '12px'); // Normal eyes
+        });
+
+        // Keyboard shortcut to summon (Shift + P)
+        document.addEventListener('keydown', (e) => {
+            if (e.shiftKey && e.key.toLowerCase() === 'p') {
+                this.toggleVisibility();
+            }
+        });
+    },
+
+    createSummonButton() {
+        const btn = document.createElement('button');
+        btn.className = 'summon-peter-btn';
+        btn.innerHTML = '<i class="fas fa-robot"></i>';
+        btn.title = "Summon Peter (Shift + P)";
+        btn.onclick = () => this.toggleVisibility();
+        document.body.appendChild(btn);
+    },
+
+    toggleVisibility() {
+        this.isVisible = !this.isVisible;
+
+        if (this.isVisible) {
+            this.container.classList.remove('hidden');
+            this.playRobotSound('activate');
+            this.speak("Peter online! Systems nominal. 🤖");
+            this.happyJump();
+            this.resetIdleTimer();
+        } else {
+            this.speak("Peter signing off. Catch you later! 👋");
+            setTimeout(() => {
+                this.container.classList.add('hidden');
+                this.playRobotSound('deactivate');
+            }, 1500);
+        }
+    },
+
+    resetIdleTimer() {
+        if (!this.isVisible) return;
+
+        clearTimeout(this.idleTimer);
+        this.idleTimer = setTimeout(() => {
+            if (this.isVisible) {
+                this.speak("Entering sleep mode to save energy... 💤");
+                setTimeout(() => this.toggleVisibility(), 2000);
+            }
+        }, 30000); // 30 seconds idle
+    },
+
+    trackEyes(mouseX, mouseY) {
+        if (!this.orb) return;
+
+        const rect = this.orb.getBoundingClientRect();
+        const centerX = rect.left + rect.width / 2;
+        const centerY = rect.top + rect.height / 2;
+
+        const angle = Math.atan2(mouseY - centerY, mouseX - centerX);
+        const distance = Math.min(5, Math.hypot(mouseX - centerX, mouseY - centerY) / 20);
+
+        const eyeX = Math.cos(angle) * distance;
+        const eyeY = Math.sin(angle) * distance;
+
+        this.eyes.forEach(eye => {
+            eye.style.transform = `translate(${eyeX}px, ${eyeY}px)`;
+        });
+    },
+
+    happyJump() {
+        this.orb.style.animation = 'none';
+        this.orb.offsetHeight; /* trigger reflow */
+        this.orb.style.animation = 'familiarJump 0.5s ease';
+        setTimeout(() => {
+            this.orb.style.animation = 'familiarFloat 4s ease-in-out infinite';
+        }, 500);
+    },
+
+    speak(message) {
+        this.isSpeaking = true;
+        this.text.style.display = 'none';
+        this.dots.style.display = 'flex';
+        this.dialogue.classList.add('active');
+        this.playRobotSound('talk');
+
+        // Simulate typing
+        setTimeout(() => {
+            this.dots.style.display = 'none';
+            this.text.textContent = message;
+            this.text.style.display = 'block';
+
+            // Hide after delay
+            setTimeout(() => {
+                this.dialogue.classList.remove('active');
+                this.isSpeaking = false;
+            }, 5000);
+        }, 1000);
+    },
+
+    playRobotSound(type) {
+        if (!window.audioCtx) return;
+        const now = audioCtx.currentTime;
+        const oscillator = audioCtx.createOscillator();
+        const gainNode = audioCtx.createGain();
+
+        oscillator.connect(gainNode);
+        gainNode.connect(audioCtx.destination);
+
+        switch (type) {
+            case 'activate':
+                oscillator.type = 'square';
+                oscillator.frequency.setValueAtTime(220, now);
+                oscillator.frequency.linearRampToValueAtTime(880, now + 0.3);
+                gainNode.gain.setValueAtTime(0.1, now);
+                gainNode.gain.linearRampToValueAtTime(0, now + 0.3);
+                oscillator.start(now);
+                oscillator.stop(now + 0.3);
+                break;
+            case 'deactivate':
+                oscillator.type = 'sawtooth';
+                oscillator.frequency.setValueAtTime(880, now);
+                oscillator.frequency.linearRampToValueAtTime(220, now + 0.3);
+                gainNode.gain.setValueAtTime(0.1, now);
+                gainNode.gain.linearRampToValueAtTime(0, now + 0.3);
+                oscillator.start(now);
+                oscillator.stop(now + 0.3);
+                break;
+            case 'chirp':
+                oscillator.type = 'sine';
+                oscillator.frequency.setValueAtTime(1200, now);
+                oscillator.frequency.exponentialRampToValueAtTime(2000, now + 0.1);
+                gainNode.gain.setValueAtTime(0.05, now);
+                gainNode.gain.exponentialRampToValueAtTime(0.01, now + 0.1);
+                oscillator.start(now);
+                oscillator.stop(now + 0.1);
+                break;
+            case 'talk':
+                // Rapid random beeps
+                for (let i = 0; i < 5; i++) {
+                    const osc = audioCtx.createOscillator();
+                    const gn = audioCtx.createGain();
+                    osc.connect(gn);
+                    gn.connect(audioCtx.destination);
+                    osc.type = 'square';
+                    osc.frequency.setValueAtTime(400 + Math.random() * 400, now + i * 0.05);
+                    gn.gain.setValueAtTime(0.02, now + i * 0.05);
+                    gn.gain.linearRampToValueAtTime(0, now + i * 0.05 + 0.03);
+                    osc.start(now + i * 0.05);
+                    osc.stop(now + i * 0.05 + 0.03);
+                }
+                break;
+            default:
+                break;
+        }
+    }
+};
+
+// Initialize AI
 document.addEventListener('DOMContentLoaded', () => {
     checkSubmissionSuccess();
+    aiFamiliar.init();
 });
