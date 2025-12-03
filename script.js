@@ -725,6 +725,12 @@ const contactForm = document.getElementById('contactForm');
 if (contactForm) {
     const magicInputs = document.querySelectorAll('.magic-input input, .magic-input textarea');
 
+    // Dynamic redirect URL for hosted environment
+    const nextInput = contactForm.querySelector('input[name="_next"]');
+    if (nextInput) {
+        nextInput.value = window.location.href.split('?')[0] + '?success=true';
+    }
+
     magicInputs.forEach(input => {
         input.addEventListener('focus', () => {
             input.parentElement.classList.add('focused');
