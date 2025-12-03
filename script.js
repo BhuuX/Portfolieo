@@ -46,41 +46,7 @@ window.addEventListener('load', () => {
     }, 200);
 });
 
-// Advanced Multi-Layer Cursor System
-const cursor = document.getElementById('cursor');
-const cursorTrail = document.getElementById('cursorTrail');
-let mouseX = 0, mouseY = 0;
-let trailX = 0, trailY = 0;
 
-document.addEventListener('mousemove', (e) => {
-    mouseX = e.clientX;
-    mouseY = e.clientY;
-
-    cursor.style.left = mouseX + 'px';
-    cursor.style.top = mouseY + 'px';
-
-    // Smooth trail following
-    trailX += (mouseX - trailX) * 0.1;
-    trailY += (mouseY - trailY) * 0.1;
-    cursorTrail.style.left = trailX - 4 + 'px';
-    cursorTrail.style.top = trailY - 4 + 'px';
-});
-
-// Cursor hover effects with multiple states
-const interactiveElements = document.querySelectorAll('a, button, .nav-link, .quantum-btn, .project-crystal, .skill-sphere, .power-card, .enchanted-method');
-interactiveElements.forEach(element => {
-    element.addEventListener('mouseenter', () => {
-        cursor.style.transform = 'scale(2)';
-        cursorTrail.style.transform = 'scale(1.5)';
-        cursor.querySelector('.cursor-ring').style.borderColor = 'var(--secondary)';
-    });
-
-    element.addEventListener('mouseleave', () => {
-        cursor.style.transform = 'scale(1)';
-        cursorTrail.style.transform = 'scale(1)';
-        cursor.querySelector('.cursor-ring').style.borderColor = 'var(--primary)';
-    });
-});
 
 // Advanced Particle System with Multiple Layers
 class EnhancedParticleSystem {
@@ -1262,6 +1228,66 @@ function triggerConfetti() {
     }
 }
 
+// --- Visual Upgrades Logic ---
+
+// 1. Magical Cursor
+const cursor = document.querySelector('.magic-cursor');
+const cursorTrail = document.querySelector('.cursor-trail');
+
+if (cursor && cursorTrail) {
+    document.addEventListener('mousemove', (e) => {
+        cursor.style.left = e.clientX + 'px';
+        cursor.style.top = e.clientY + 'px';
+
+        // Trail delay effect
+        setTimeout(() => {
+            cursorTrail.style.left = e.clientX + 'px';
+            cursorTrail.style.top = e.clientY + 'px';
+        }, 50);
+    });
+
+    // Hover effect for clickable elements
+    const clickables = document.querySelectorAll('a, button, .project-crystal, .skill-sphere');
+    clickables.forEach(el => {
+        el.addEventListener('mouseenter', () => {
+            cursor.classList.add('hovered');
+            cursorTrail.style.transform = 'translate(-50%, -50%) scale(1.5)';
+        });
+        el.addEventListener('mouseleave', () => {
+            cursor.classList.remove('hovered');
+            cursorTrail.style.transform = 'translate(-50%, -50%) scale(1)';
+        });
+    });
+}
+
+// 2. Scroll Progress & Warp to Top
+const progressBar = document.querySelector('.scroll-progress');
+const warpBtn = document.getElementById('warpTopBtn');
+
+window.addEventListener('scroll', () => {
+    // Progress Bar
+    const winScroll = document.body.scrollTop || document.documentElement.scrollTop;
+    const height = document.documentElement.scrollHeight - document.documentElement.clientHeight;
+    const scrolled = (winScroll / height) * 100;
+    if (progressBar) progressBar.style.width = scrolled + "%";
+
+    // Warp Button
+    if (warpBtn) {
+        if (winScroll > 500) {
+            warpBtn.classList.add('visible');
+        } else {
+            warpBtn.classList.remove('visible');
+        }
+    }
+});
+
+if (warpBtn) {
+    warpBtn.addEventListener('click', () => {
+        window.scrollTo({ top: 0, behavior: 'smooth' });
+        playSound('hover');
+    });
+}
+
 // AI Assistant (Peter) Logic
 // AI Assistant (Peter) Logic
 // AI Assistant (Peter) Logic - Advanced Brain 🧠
@@ -1274,9 +1300,11 @@ const aiFamiliar = {
     dots: document.getElementById('typingDots'),
     moodDisplay: document.querySelector('.peter-mood'),
     levelDisplay: document.getElementById('peterLevel'),
+    voiceIcon: document.getElementById('voiceIcon'),
 
     isVisible: false,
     idleTimer: null,
+    voiceEnabled: false,
 
     // Pet Stats
     stats: {
@@ -1295,7 +1323,8 @@ const aiFamiliar = {
         jokes: ['joke', 'funny', 'laugh'],
         identity: ['who are you', 'what are you', 'name'],
         creator: ['who made you', 'creator', 'author', 'bhuux'],
-        status: ['how are you', 'status', 'mood']
+        status: ['how are you', 'status', 'mood'],
+        commands: ['dark mode', 'light mode', 'lights off', 'lights on']
     },
 
     jokes: [
@@ -1350,7 +1379,7 @@ const aiFamiliar = {
         if (this.isVisible) {
             this.container.classList.remove('hidden');
             this.playRobotSound('activate');
-            this.addBotMessage("Peter online! Systems nominal. 🤖");
+            this.speak("Peter online! Systems nominal. 🤖");
             this.happyJump();
             this.resetIdleTimer();
         } else {
@@ -1366,6 +1395,18 @@ const aiFamiliar = {
         }
     },
 
+    switchTab(tabName) {
+        // Update buttons
+        document.querySelectorAll('.tab-btn').forEach(btn => btn.classList.remove('active'));
+        event.currentTarget.classList.add('active');
+
+        // Update content
+        document.querySelectorAll('.tab-content').forEach(content => content.classList.remove('active'));
+        document.getElementById(`tab-${tabName}`).classList.add('active');
+
+        this.playRobotSound('click');
+    },
+
     handleEnter(e) {
         if (e.key === 'Enter') this.handleUserMessage();
     },
@@ -1374,31 +1415,36 @@ const aiFamiliar = {
         const text = this.input.value.trim();
         if (!text) return;
 
-        // Add user message
         this.addUserMessage(text);
         this.input.value = '';
 
-        // Process response
         this.showTyping();
         setTimeout(() => {
             const response = this.analyzeInput(text.toLowerCase());
             this.hideTyping();
-            this.addBotMessage(response);
-            this.playRobotSound('talk');
+            this.speak(response);
         }, 1000 + Math.random() * 500);
     },
 
     analyzeInput(text) {
-        // Check stats first
-        if (this.stats.energy < 20) return "I'm too tired... need energy... �";
+        // Commands
+        if (text.includes('dark mode') || text.includes('lights off')) {
+            document.body.classList.remove('light-theme');
+            localStorage.setItem('theme', 'dark');
+            return "Dark mode activated. Stealth protocols engaged. 🌑";
+        }
+        if (text.includes('light mode') || text.includes('lights on')) {
+            document.body.classList.add('light-theme');
+            localStorage.setItem('theme', 'light');
+            return "Light mode activated. Solar shields up! ☀️";
+        }
+
+        // Check stats
+        if (this.stats.energy < 20) return "I'm too tired... need energy... 🔋";
 
         // Pattern Matching
-        if (this.brain.greetings.some(w => text.includes(w))) {
-            return "Hello there! Ready to explore some code? 🚀";
-        }
-        if (this.brain.skills.some(w => text.includes(w))) {
-            return "BhuuX is a master of the MERN stack! React, Node, Express, and MongoDB are his weapons of choice. ⚔️";
-        }
+        if (this.brain.greetings.some(w => text.includes(w))) return "Hello there! Ready to explore some code? 🚀";
+        if (this.brain.skills.some(w => text.includes(w))) return "BhuuX is a master of the MERN stack! React, Node, Express, and MongoDB. ⚔️";
         if (this.brain.projects.some(w => text.includes(w))) {
             setTimeout(() => window.location.href = '#projects', 1500);
             return "Let me warp you to the Projects section! Hold on... 🌌";
@@ -1407,26 +1453,16 @@ const aiFamiliar = {
             setTimeout(() => window.location.href = '#contact', 1500);
             return "Opening communication channels... warping to Contact section! 📡";
         }
-        if (this.brain.jokes.some(w => text.includes(w))) {
-            return this.jokes[Math.floor(Math.random() * this.jokes.length)];
-        }
-        if (this.brain.identity.some(w => text.includes(w))) {
-            return "I am Peter, a Level " + this.stats.level + " Digital Familiar. My purpose is to assist you! 🤖";
-        }
-        if (this.brain.creator.some(w => text.includes(w))) {
-            return "I was forged in the digital fires by BhuuX himself! 🔥";
-        }
-        if (this.brain.status.some(w => text.includes(w))) {
-            return `Systems Check: Happiness ${this.stats.happiness}%, Energy ${this.stats.energy}%. Feeling ${this.getMood()}!`;
-        }
+        if (this.brain.jokes.some(w => text.includes(w))) return this.jokes[Math.floor(Math.random() * this.jokes.length)];
+        if (this.brain.identity.some(w => text.includes(w))) return "I am Peter v2.0, a Level " + this.stats.level + " Digital Familiar. 🤖";
+        if (this.brain.creator.some(w => text.includes(w))) return "I was forged in the digital fires by BhuuX himself! 🔥";
+        if (this.brain.status.some(w => text.includes(w))) return `Systems Check: Happiness ${this.stats.happiness}%, Energy ${this.stats.energy}%. Mood: ${this.getMood()}!`;
 
-        // Default AI Response (Simulated)
         const defaults = [
             "Interesting... tell me more! 🤔",
             "I'm analyzing that input... beep boop. 🧠",
             "My databanks don't have a specific record for that, but I'm learning! 📚",
-            "Have you seen the cool 3D effects on this site? ✨",
-            "Try asking me to tell a joke! 🎭"
+            "Try asking me to tell a joke or switch to dark mode! 🎭"
         ];
         return defaults[Math.floor(Math.random() * defaults.length)];
     },
@@ -1434,38 +1470,91 @@ const aiFamiliar = {
     // Actions
     feed() {
         if (this.stats.energy >= 100) {
-            this.addBotMessage("I'm full! No more bytes for me. 🤢");
+            this.speak("I'm full! No more bytes for me. 🤢");
             return;
         }
         this.stats.energy = Math.min(100, this.stats.energy + 20);
         this.stats.happiness = Math.min(100, this.stats.happiness + 5);
         this.addXp(10);
         this.updateMoodDisplay();
-        this.addBotMessage("Yum! That apple was delicious. Energy restored! 🍎");
-        this.playRobotSound('chirp');
+        this.speak("Yum! That apple was delicious. Energy restored! 🍎");
         this.happyJump();
     },
 
     play() {
         if (this.stats.energy < 10) {
-            this.addBotMessage("Too tired to play... zzz... 😴");
+            this.speak("Too tired to play... zzz... 😴");
             return;
         }
         this.stats.energy -= 10;
         this.stats.happiness = Math.min(100, this.stats.happiness + 15);
         this.addXp(20);
         this.updateMoodDisplay();
-        this.addBotMessage("Wheee! Catch! 🎾 That was fun!");
-        this.playRobotSound('activate');
+        this.speak("Wheee! Catch! 🎾 That was fun!");
         this.happyJump();
     },
 
     tellJoke() {
         const joke = this.jokes[Math.floor(Math.random() * this.jokes.length)];
-        this.addBotMessage(joke);
+        this.speak(joke);
         this.stats.happiness = Math.min(100, this.stats.happiness + 10);
         this.addXp(5);
         this.updateMoodDisplay();
+    },
+
+    playRPS(userChoice) {
+        const choices = ['rock', 'paper', 'scissors'];
+        const botChoice = choices[Math.floor(Math.random() * choices.length)];
+        let result = '';
+
+        if (userChoice === botChoice) result = "It's a tie! 🤝";
+        else if (
+            (userChoice === 'rock' && botChoice === 'scissors') ||
+            (userChoice === 'paper' && botChoice === 'rock') ||
+            (userChoice === 'scissors' && botChoice === 'paper')
+        ) {
+            result = "You win! 🎉";
+            this.addXp(30);
+            this.stats.happiness = Math.min(100, this.stats.happiness + 10);
+        } else {
+            result = "I win! Hehe. 🤖";
+            this.stats.happiness = Math.min(100, this.stats.happiness + 5);
+        }
+
+        this.speak(`I chose ${botChoice}. ${result}`);
+        this.updateMoodDisplay();
+    },
+
+    startTour() {
+        this.speak("Initiating Guided Tour! Follow me... 🗺️");
+        this.toggleChat(); // Close chat to see screen
+
+        const sections = ['#home', '#about', '#skills', '#projects', '#contact'];
+        let currentStep = 0;
+
+        const tourInterval = setInterval(() => {
+            if (currentStep >= sections.length) {
+                clearInterval(tourInterval);
+                this.speak("Tour complete! Hope you enjoyed it. 👋");
+                return;
+            }
+
+            window.location.href = sections[currentStep];
+            this.playRobotSound('activate');
+            currentStep++;
+        }, 3000);
+    },
+
+    setColor(color) {
+        document.documentElement.style.setProperty('--primary', color);
+        this.speak(`Color calibrated to ${color}. Looking fresh! 🎨`);
+        this.happyJump();
+    },
+
+    toggleSound() {
+        this.voiceEnabled = !this.voiceEnabled;
+        this.voiceIcon.className = this.voiceEnabled ? "fas fa-volume-up" : "fas fa-volume-mute";
+        this.speak(this.voiceEnabled ? "Voice synthesis activated." : "Voice synthesis deactivated.");
     },
 
     // Helpers
@@ -1483,6 +1572,18 @@ const aiFamiliar = {
         div.textContent = text;
         this.chatHistory.appendChild(div);
         this.scrollToBottom();
+    },
+
+    speak(text) {
+        this.addBotMessage(text);
+        this.playRobotSound('talk');
+
+        if (this.voiceEnabled && 'speechSynthesis' in window) {
+            const utterance = new SpeechSynthesisUtterance(text);
+            utterance.pitch = 1.2; // Robotic pitch
+            utterance.rate = 1.1;
+            window.speechSynthesis.speak(utterance);
+        }
     },
 
     showTyping() {
@@ -1504,7 +1605,7 @@ const aiFamiliar = {
             this.stats.level++;
             this.stats.xp = 0;
             this.levelDisplay.textContent = this.stats.level;
-            this.addBotMessage(`LEVEL UP! I am now Level ${this.stats.level}! 🌟`);
+            this.speak(`LEVEL UP! I am now Level ${this.stats.level}! 🌟`);
             this.playRobotSound('activate');
         }
     },
@@ -1531,7 +1632,7 @@ const aiFamiliar = {
         clearTimeout(this.idleTimer);
         this.idleTimer = setTimeout(() => {
             if (this.isVisible) {
-                this.addBotMessage("Entering sleep mode... 💤");
+                this.speak("Entering sleep mode... 💤");
                 setTimeout(() => this.toggleVisibility(), 2000);
             }
         }, 60000);
@@ -1592,6 +1693,14 @@ const aiFamiliar = {
                 oscillator.start(now);
                 oscillator.stop(now + 0.1);
                 break;
+            case 'click':
+                oscillator.type = 'triangle';
+                oscillator.frequency.setValueAtTime(600, now);
+                gainNode.gain.setValueAtTime(0.05, now);
+                gainNode.gain.exponentialRampToValueAtTime(0.01, now + 0.05);
+                oscillator.start(now);
+                oscillator.stop(now + 0.05);
+                break;
             case 'talk':
                 for (let i = 0; i < 5; i++) {
                     const osc = audioCtx.createOscillator();
@@ -1614,4 +1723,37 @@ const aiFamiliar = {
 document.addEventListener('DOMContentLoaded', () => {
     checkSubmissionSuccess();
     aiFamiliar.init();
+
+    // Project Filtering Logic
+    const filterBtns = document.querySelectorAll('.filter-btn');
+    const projectItems = document.querySelectorAll('.project-crystal');
+
+    filterBtns.forEach(btn => {
+        btn.addEventListener('click', () => {
+            // Remove active class from all buttons
+            filterBtns.forEach(b => b.classList.remove('active'));
+            // Add active class to clicked button
+            btn.classList.add('active');
+
+            const filterValue = btn.getAttribute('data-filter');
+
+            projectItems.forEach(item => {
+                if (filterValue === 'all' || item.getAttribute('data-category') === filterValue) {
+                    item.style.display = 'block';
+                    setTimeout(() => {
+                        item.style.opacity = '1';
+                        item.style.transform = 'scale(1)';
+                    }, 50);
+                } else {
+                    item.style.opacity = '0';
+                    item.style.transform = 'scale(0.8)';
+                    setTimeout(() => {
+                        item.style.display = 'none';
+                    }, 300);
+                }
+            });
+
+            playSound('click');
+        });
+    });
 });

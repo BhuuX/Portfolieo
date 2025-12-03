@@ -23,6 +23,7 @@
     <!-- CSS -->
     <link rel="stylesheet" href="style.css">
     <link rel="stylesheet" href="ai-assistant.css">
+    <link rel="stylesheet" href="visual-upgrades.css">
 
     <!-- Meta Tags for SEO -->
     <meta name="description"
@@ -63,11 +64,11 @@
     </div>
 
     <!-- Advanced Custom Cursor -->
-    <div class="custom-cursor" id="cursor">
-        <div class="cursor-dot"></div>
-        <div class="cursor-ring"></div>
-    </div>
-    <div class="cursor-trail" id="cursorTrail"></div>
+    <!-- Visual Upgrades -->
+    <div class="scroll-progress"></div>
+    <div class="magic-cursor"></div>
+    <div class="cursor-trail"></div>
+    <button id="warpTopBtn" title="Warp to Top"><i class="fas fa-rocket"></i></button>
 
     <!-- Multi-Layer Background System -->
     <canvas id="particleCanvas" class="particle-bg"></canvas>
@@ -610,7 +611,7 @@
             </div>
 
             <div class="projects-3d-showcase">
-                <div class="project-crystal" data-aos="flip-left" data-aos-delay="100">
+                <div class="project-crystal" data-category="frontend" data-aos="flip-left" data-aos-delay="100">
                     <div class="crystal-frame">
                         <div class="project-hologram">
                             <div class="hologram-layer layer-1">
@@ -653,7 +654,7 @@
                     </div>
                 </div>
 
-                <div class="project-crystal" data-aos="flip-right" data-aos-delay="200">
+                <div class="project-crystal" data-category="backend" data-aos="flip-right" data-aos-delay="200">
                     <div class="crystal-frame">
                         <div class="project-hologram">
                             <div class="hologram-layer layer-1">
@@ -697,7 +698,7 @@
                 </div>
 
 
-                <div class="project-crystal" data-aos="flip-left" data-aos-delay="300">
+                <div class="project-crystal" data-category="frontend" data-aos="flip-left" data-aos-delay="300">
                     <div class="crystal-frame">
                         <div class="project-hologram">
                             <div class="hologram-layer layer-1">
@@ -968,9 +969,15 @@
         </div>
     </footer>
 
+    <!-- Visual Upgrades -->
+    <div class="magic-cursor"></div>
+    <div class="cursor-trail"></div>
+    <div class="scroll-progress"></div>
+    <button id="warpTopBtn" title="Warp to Top"><i class="fas fa-rocket"></i></button>
+
     <!-- AI Assistant (Digital Familiar) -->
     <div class="ai-familiar" id="aiFamiliar">
-        <div class="familiar-orb">
+        <div class="familiar-orb" data-tilt data-tilt-scale="1.1">
             <div class="familiar-core">
                 <div class="eye left"></div>
                 <div class="eye right"></div>
@@ -984,27 +991,64 @@
         </div>
         <div class="familiar-dialogue" id="familiarDialogue">
             <div class="chat-header">
-                <span>Peter (Level <span id="peterLevel">1</span>)</span>
-                <div class="peter-mood">Happy 😺</div>
+                <span>Peter (Lvl <span id="peterLevel">1</span>)</span>
+                <div class="header-controls">
+                    <button class="mini-btn" onclick="aiFamiliar.toggleSound()" title="Toggle Voice"><i
+                            class="fas fa-volume-up" id="voiceIcon"></i></button>
+                    <div class="peter-mood">Happy 😺</div>
+                </div>
             </div>
             <div class="chat-history" id="chatHistory">
-                <div class="chat-message bot">Greetings! I am Peter. I can analyze this portfolio, tell jokes, or just
-                    play! 🤖</div>
+                <div class="chat-message bot">Greetings! I am Peter v2.0. I can speak, play games, and control the site!
+                    🤖</div>
             </div>
             <div class="typing-dots" id="typingDots">
                 <span></span><span></span><span></span>
             </div>
             <div class="chat-controls">
-                <div class="pet-actions">
-                    <button class="action-btn" onclick="aiFamiliar.feed()" title="Feed (Apple)"><i
-                            class="fas fa-apple-alt"></i></button>
-                    <button class="action-btn" onclick="aiFamiliar.play()" title="Play (Ball)"><i
-                            class="fas fa-baseball-ball"></i></button>
-                    <button class="action-btn" onclick="aiFamiliar.tellJoke()" title="Tell Joke"><i
-                            class="fas fa-laugh-beam"></i></button>
+                <div class="pet-tabs">
+                    <button class="tab-btn active" onclick="aiFamiliar.switchTab('actions')"><i
+                            class="fas fa-paw"></i></button>
+                    <button class="tab-btn" onclick="aiFamiliar.switchTab('games')"><i
+                            class="fas fa-gamepad"></i></button>
+                    <button class="tab-btn" onclick="aiFamiliar.switchTab('settings')"><i
+                            class="fas fa-cog"></i></button>
                 </div>
+
+                <div id="tab-actions" class="tab-content active">
+                    <div class="pet-actions">
+                        <button class="action-btn" onclick="aiFamiliar.feed()" title="Feed (Apple)"><i
+                                class="fas fa-apple-alt"></i></button>
+                        <button class="action-btn" onclick="aiFamiliar.play()" title="Play (Ball)"><i
+                                class="fas fa-baseball-ball"></i></button>
+                        <button class="action-btn" onclick="aiFamiliar.startTour()" title="Guided Tour"><i
+                                class="fas fa-map-marked-alt"></i></button>
+                    </div>
+                </div>
+
+                <div id="tab-games" class="tab-content">
+                    <div class="pet-actions">
+                        <button class="action-btn" onclick="aiFamiliar.playRPS('rock')" title="Rock">✊</button>
+                        <button class="action-btn" onclick="aiFamiliar.playRPS('paper')" title="Paper">✋</button>
+                        <button class="action-btn" onclick="aiFamiliar.playRPS('scissors')" title="Scissors">✌️</button>
+                    </div>
+                </div>
+
+                <div id="tab-settings" class="tab-content">
+                    <div class="color-picker">
+                        <button class="color-btn" style="background:#8b5cf6"
+                            onclick="aiFamiliar.setColor('#8b5cf6')"></button>
+                        <button class="color-btn" style="background:#ef4444"
+                            onclick="aiFamiliar.setColor('#ef4444')"></button>
+                        <button class="color-btn" style="background:#10b981"
+                            onclick="aiFamiliar.setColor('#10b981')"></button>
+                        <button class="color-btn" style="background:#3b82f6"
+                            onclick="aiFamiliar.setColor('#3b82f6')"></button>
+                    </div>
+                </div>
+
                 <div class="chat-input-area">
-                    <input type="text" id="userChatInput" placeholder="Ask me anything..."
+                    <input type="text" id="userChatInput" placeholder="Type 'help' for commands..."
                         onkeypress="aiFamiliar.handleEnter(event)">
                     <button class="send-btn" onclick="aiFamiliar.handleUserMessage()"><i
                             class="fas fa-paper-plane"></i></button>
@@ -1014,6 +1058,7 @@
     </div>
 
     <!-- Scripts -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/vanilla-tilt/1.8.0/vanilla-tilt.min.js"></script>
     <script src="https://unpkg.com/aos@2.3.1/dist/aos.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/swiper@10/swiper-bundle.min.js"></script>
     <script src="script.js"></script>
