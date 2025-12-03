@@ -23,15 +23,44 @@
     --shadow-cosmic: 0 0 80px rgba(20, 184, 166, 0.2);
 }
 
-/* Light Theme */
+/* Light Theme - Premium "Daylight" Aesthetic */
 .light-theme {
-    --void: #f8fafc;
-    --cosmic: #f1f5f9;
-    --nebula: #ffffff;
-    --starlight: #0f172a;
-    --moonlight: #334155;
-    --ethereal: #64748b;
-    --border: #e2e8f0;
+    --void: #f3f4f6; /* Soft gray background */
+    --cosmic: #ffffff; /* White card background */
+    --nebula: #e5e7eb; /* Light border/separator */
+    --starlight: #111827; /* Dark text for contrast */
+    --moonlight: #4b5563; /* Secondary text */
+    --ethereal: #6b7280; /* Muted text */
+    --border: #d1d5db;
+    --shadow-mystic: 0 10px 30px -10px rgba(139, 92, 246, 0.4); /* Softer, colored shadows */
+    --shadow-ethereal: 0 10px 30px -10px rgba(236, 72, 153, 0.4);
+    --shadow-cosmic: 0 10px 30px -10px rgba(20, 184, 166, 0.3);
+}
+
+/* Specific Light Theme Overrides for Glassmorphism */
+.light-theme .power-card,
+.light-theme .alchemy-info-card,
+.light-theme .skill-sphere,
+.light-theme .project-crystal,
+.light-theme .node-content {
+    background: rgba(255, 255, 255, 0.8);
+    border: 1px solid rgba(229, 231, 235, 0.8);
+    box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.05), 0 2px 4px -1px rgba(0, 0, 0, 0.03);
+}
+
+.light-theme .navbar {
+    background: rgba(255, 255, 255, 0.85);
+    border-bottom: 1px solid rgba(229, 231, 235, 0.8);
+}
+
+.light-theme .navbar.scrolled {
+    background: rgba(255, 255, 255, 0.95);
+    box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.05);
+}
+
+.light-theme .tech-runes span {
+    background: rgba(139, 92, 246, 0.1);
+    color: var(--primary);
 }
 
 /* Global Reset & Base */
@@ -1503,11 +1532,12 @@ section {
     align-items: center;
     gap: 25px;
     padding: 25px;
-    background: rgba(51, 65, 85, 0.3);
-    border: 1px solid rgba(139, 92, 246, 0.2);
+    background: rgba(30, 41, 59, 0.6); /* Darker, more opaque for better contrast */
+    border: 1px solid rgba(139, 92, 246, 0.1);
     border-radius: 20px;
-    backdrop-filter: blur(10px);
-    transition: all 0.3s ease;
+    backdrop-filter: blur(12px);
+    transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+    box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
 }
 
 .power-card:hover {
@@ -1574,13 +1604,14 @@ section {
 
 /* About Info Card */
 .alchemy-info-card {
-    background: rgba(51, 65, 85, 0.3);
-    border: 1px solid rgba(139, 92, 246, 0.2);
+    background: rgba(30, 41, 59, 0.6);
+    border: 1px solid rgba(139, 92, 246, 0.1);
     border-radius: 25px;
     padding: 40px;
-    backdrop-filter: blur(20px);
+    backdrop-filter: blur(12px);
     position: relative;
     overflow: hidden;
+    box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -2px rgba(0, 0, 0, 0.05);
 }
 
 .alchemy-info-card::before {
@@ -1736,14 +1767,15 @@ section {
 }
 
 .skill-sphere {
-    background: rgba(51, 65, 85, 0.3);
-    border: 1px solid rgba(139, 92, 246, 0.2);
+    background: rgba(30, 41, 59, 0.6);
+    border: 1px solid rgba(139, 92, 246, 0.1);
     border-radius: 25px;
     padding: 40px;
-    backdrop-filter: blur(20px);
-    transition: all 0.4s ease;
+    backdrop-filter: blur(12px);
+    transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
     position: relative;
     overflow: hidden;
+    box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1);
 }
 
 .skill-sphere::before {
@@ -1918,13 +1950,14 @@ section {
 }
 
 .project-crystal {
-    background: rgba(51, 65, 85, 0.3);
-    border: 1px solid rgba(139, 92, 246, 0.2);
+    background: rgba(30, 41, 59, 0.6);
+    border: 1px solid rgba(139, 92, 246, 0.1);
     border-radius: 30px;
     overflow: hidden;
-    backdrop-filter: blur(20px);
-    transition: all 0.4s ease;
+    backdrop-filter: blur(12px);
+    transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
     position: relative;
+    box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.1), 0 10px 10px -5px rgba(0, 0, 0, 0.04);
 }
 
 .project-crystal:hover {
@@ -2151,12 +2184,18 @@ section {
 
 .node-content {
     flex: 1;
-    background: rgba(51, 65, 85, 0.3);
-    border: 1px solid rgba(139, 92, 246, 0.2);
+    background: rgba(30, 41, 59, 0.6);
+    border: 1px solid rgba(139, 92, 246, 0.1);
     border-radius: 20px;
     padding: 30px;
-    backdrop-filter: blur(10px);
+    backdrop-filter: blur(12px);
     position: relative;
+    box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
+    transition: transform 0.3s ease;
+}
+
+.timeline-node:hover .node-content {
+    transform: translateY(-5px);
 }
 
 .node-date {
