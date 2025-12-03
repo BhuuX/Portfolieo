@@ -983,9 +983,32 @@
             <div class="familiar-particles"></div>
         </div>
         <div class="familiar-dialogue" id="familiarDialogue">
-            <span class="dialogue-text">Greetings! I am BhuuX's Digital Spirit. How may I assist?</span>
-            <div class="typing-dots">
+            <div class="chat-header">
+                <span>Peter (Level <span id="peterLevel">1</span>)</span>
+                <div class="peter-mood">Happy 😺</div>
+            </div>
+            <div class="chat-history" id="chatHistory">
+                <div class="chat-message bot">Greetings! I am Peter. I can analyze this portfolio, tell jokes, or just
+                    play! 🤖</div>
+            </div>
+            <div class="typing-dots" id="typingDots">
                 <span></span><span></span><span></span>
+            </div>
+            <div class="chat-controls">
+                <div class="pet-actions">
+                    <button class="action-btn" onclick="aiFamiliar.feed()" title="Feed (Apple)"><i
+                            class="fas fa-apple-alt"></i></button>
+                    <button class="action-btn" onclick="aiFamiliar.play()" title="Play (Ball)"><i
+                            class="fas fa-baseball-ball"></i></button>
+                    <button class="action-btn" onclick="aiFamiliar.tellJoke()" title="Tell Joke"><i
+                            class="fas fa-laugh-beam"></i></button>
+                </div>
+                <div class="chat-input-area">
+                    <input type="text" id="userChatInput" placeholder="Ask me anything..."
+                        onkeypress="aiFamiliar.handleEnter(event)">
+                    <button class="send-btn" onclick="aiFamiliar.handleUserMessage()"><i
+                            class="fas fa-paper-plane"></i></button>
+                </div>
             </div>
         </div>
     </div>

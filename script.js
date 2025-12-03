@@ -1264,44 +1264,53 @@ function triggerConfetti() {
 
 // AI Assistant (Peter) Logic
 // AI Assistant (Peter) Logic
+// AI Assistant (Peter) Logic - Advanced Brain 🧠
 const aiFamiliar = {
     container: document.getElementById('aiFamiliar'),
     orb: document.querySelector('.familiar-orb'),
-    core: document.querySelector('.familiar-core'),
-    eyes: document.querySelectorAll('.eye'),
     dialogue: document.getElementById('familiarDialogue'),
-    text: document.querySelector('.dialogue-text'),
-    dots: document.querySelector('.typing-dots'),
+    chatHistory: document.getElementById('chatHistory'),
+    input: document.getElementById('userChatInput'),
+    dots: document.getElementById('typingDots'),
+    moodDisplay: document.querySelector('.peter-mood'),
+    levelDisplay: document.getElementById('peterLevel'),
 
     isVisible: false,
     idleTimer: null,
 
-    messages: [
-        "I'm Peter! At your service. ⚡",
-        "Wow, did you see that animation? Cool right? 😎",
-        "I'm keeping an eye on the code... literally! 👀",
-        "Need a tour? I know this place inside out! 🗺️",
-        "BhuuX is a wizard, and I'm his apprentice! 🧙‍♂️",
-        "Hey! Down here! I have secrets to share... 🤫",
-        "Is it just me, or is this portfolio looking sharp? ✨"
+    // Pet Stats
+    stats: {
+        happiness: 100,
+        energy: 100,
+        level: 1,
+        xp: 0
+    },
+
+    // Knowledge Base
+    brain: {
+        greetings: ['hi', 'hello', 'hey', 'sup', 'yo'],
+        skills: ['skill', 'stack', 'tech', 'react', 'node', 'js', 'javascript', 'css'],
+        projects: ['project', 'work', 'portfolio', 'built', 'make'],
+        contact: ['contact', 'email', 'hire', 'reach', 'message'],
+        jokes: ['joke', 'funny', 'laugh'],
+        identity: ['who are you', 'what are you', 'name'],
+        creator: ['who made you', 'creator', 'author', 'bhuux'],
+        status: ['how are you', 'status', 'mood']
+    },
+
+    jokes: [
+        "Why do programmers prefer dark mode? Because light attracts bugs! 🐛",
+        "I told a UDP joke, but you might not get it... 📦",
+        "Why did the developer go broke? Because he used up all his cache! 💸",
+        "A SQL query walks into a bar, walks up to two tables and asks... 'Can I join you?' 📊",
+        "Hardware: The part of a computer you can kick. 🦶",
+        "Real programmers count from 0. 0, 1, 2... 🔢"
     ],
 
     init() {
         if (!this.orb) return;
-
-        // Create Summon Button
         this.createSummonButton();
-
-        // Initially hidden
         this.container.classList.add('hidden');
-
-        // Random interactions (More frequent)
-        setInterval(() => {
-            if (this.isVisible && Math.random() > 0.6 && !this.isSpeaking) {
-                this.speak(this.messages[Math.floor(Math.random() * this.messages.length)]);
-                this.happyJump();
-            }
-        }, 8000);
 
         // Eye Tracking
         document.addEventListener('mousemove', (e) => {
@@ -1311,29 +1320,20 @@ const aiFamiliar = {
 
         // Click interaction
         this.orb.addEventListener('click', () => {
-            this.speak("You poked me! Hehe. How can I help? 🤖");
-            this.happyJump();
+            this.toggleChat();
             this.playRobotSound('chirp');
+            this.happyJump();
         });
 
-        // Hover effects
-        this.orb.addEventListener('mouseenter', () => {
-            this.orb.style.transform = 'scale(1.1) rotate(10deg)';
-            this.eyes.forEach(eye => eye.style.height = '2px'); // Squint/Happy eyes
-            this.playRobotSound('hover');
-        });
-
-        this.orb.addEventListener('mouseleave', () => {
-            this.orb.style.transform = 'scale(1) rotate(0deg)';
-            this.eyes.forEach(eye => eye.style.height = '12px'); // Normal eyes
-        });
-
-        // Keyboard shortcut to summon (Shift + P)
+        // Keyboard shortcut
         document.addEventListener('keydown', (e) => {
             if (e.shiftKey && e.key.toLowerCase() === 'p') {
                 this.toggleVisibility();
             }
         });
+
+        // Stats decay loop
+        setInterval(() => this.decayStats(), 60000); // Every minute
     },
 
     createSummonButton() {
@@ -1347,80 +1347,213 @@ const aiFamiliar = {
 
     toggleVisibility() {
         this.isVisible = !this.isVisible;
-
         if (this.isVisible) {
             this.container.classList.remove('hidden');
             this.playRobotSound('activate');
-            this.speak("Peter online! Systems nominal. 🤖");
+            this.addBotMessage("Peter online! Systems nominal. 🤖");
             this.happyJump();
             this.resetIdleTimer();
         } else {
-            this.speak("Peter signing off. Catch you later! 👋");
-            setTimeout(() => {
-                this.container.classList.add('hidden');
-                this.playRobotSound('deactivate');
-            }, 1500);
+            this.playRobotSound('deactivate');
+            this.container.classList.add('hidden');
         }
+    },
+
+    toggleChat() {
+        this.dialogue.classList.toggle('active');
+        if (this.dialogue.classList.contains('active')) {
+            this.input.focus();
+        }
+    },
+
+    handleEnter(e) {
+        if (e.key === 'Enter') this.handleUserMessage();
+    },
+
+    handleUserMessage() {
+        const text = this.input.value.trim();
+        if (!text) return;
+
+        // Add user message
+        this.addUserMessage(text);
+        this.input.value = '';
+
+        // Process response
+        this.showTyping();
+        setTimeout(() => {
+            const response = this.analyzeInput(text.toLowerCase());
+            this.hideTyping();
+            this.addBotMessage(response);
+            this.playRobotSound('talk');
+        }, 1000 + Math.random() * 500);
+    },
+
+    analyzeInput(text) {
+        // Check stats first
+        if (this.stats.energy < 20) return "I'm too tired... need energy... �";
+
+        // Pattern Matching
+        if (this.brain.greetings.some(w => text.includes(w))) {
+            return "Hello there! Ready to explore some code? 🚀";
+        }
+        if (this.brain.skills.some(w => text.includes(w))) {
+            return "BhuuX is a master of the MERN stack! React, Node, Express, and MongoDB are his weapons of choice. ⚔️";
+        }
+        if (this.brain.projects.some(w => text.includes(w))) {
+            setTimeout(() => window.location.href = '#projects', 1500);
+            return "Let me warp you to the Projects section! Hold on... 🌌";
+        }
+        if (this.brain.contact.some(w => text.includes(w))) {
+            setTimeout(() => window.location.href = '#contact', 1500);
+            return "Opening communication channels... warping to Contact section! 📡";
+        }
+        if (this.brain.jokes.some(w => text.includes(w))) {
+            return this.jokes[Math.floor(Math.random() * this.jokes.length)];
+        }
+        if (this.brain.identity.some(w => text.includes(w))) {
+            return "I am Peter, a Level " + this.stats.level + " Digital Familiar. My purpose is to assist you! 🤖";
+        }
+        if (this.brain.creator.some(w => text.includes(w))) {
+            return "I was forged in the digital fires by BhuuX himself! 🔥";
+        }
+        if (this.brain.status.some(w => text.includes(w))) {
+            return `Systems Check: Happiness ${this.stats.happiness}%, Energy ${this.stats.energy}%. Feeling ${this.getMood()}!`;
+        }
+
+        // Default AI Response (Simulated)
+        const defaults = [
+            "Interesting... tell me more! 🤔",
+            "I'm analyzing that input... beep boop. 🧠",
+            "My databanks don't have a specific record for that, but I'm learning! 📚",
+            "Have you seen the cool 3D effects on this site? ✨",
+            "Try asking me to tell a joke! 🎭"
+        ];
+        return defaults[Math.floor(Math.random() * defaults.length)];
+    },
+
+    // Actions
+    feed() {
+        if (this.stats.energy >= 100) {
+            this.addBotMessage("I'm full! No more bytes for me. 🤢");
+            return;
+        }
+        this.stats.energy = Math.min(100, this.stats.energy + 20);
+        this.stats.happiness = Math.min(100, this.stats.happiness + 5);
+        this.addXp(10);
+        this.updateMoodDisplay();
+        this.addBotMessage("Yum! That apple was delicious. Energy restored! 🍎");
+        this.playRobotSound('chirp');
+        this.happyJump();
+    },
+
+    play() {
+        if (this.stats.energy < 10) {
+            this.addBotMessage("Too tired to play... zzz... 😴");
+            return;
+        }
+        this.stats.energy -= 10;
+        this.stats.happiness = Math.min(100, this.stats.happiness + 15);
+        this.addXp(20);
+        this.updateMoodDisplay();
+        this.addBotMessage("Wheee! Catch! 🎾 That was fun!");
+        this.playRobotSound('activate');
+        this.happyJump();
+    },
+
+    tellJoke() {
+        const joke = this.jokes[Math.floor(Math.random() * this.jokes.length)];
+        this.addBotMessage(joke);
+        this.stats.happiness = Math.min(100, this.stats.happiness + 10);
+        this.addXp(5);
+        this.updateMoodDisplay();
+    },
+
+    // Helpers
+    addUserMessage(text) {
+        const div = document.createElement('div');
+        div.className = 'chat-message user';
+        div.textContent = text;
+        this.chatHistory.appendChild(div);
+        this.scrollToBottom();
+    },
+
+    addBotMessage(text) {
+        const div = document.createElement('div');
+        div.className = 'chat-message bot';
+        div.textContent = text;
+        this.chatHistory.appendChild(div);
+        this.scrollToBottom();
+    },
+
+    showTyping() {
+        this.dots.style.display = 'flex';
+        this.scrollToBottom();
+    },
+
+    hideTyping() {
+        this.dots.style.display = 'none';
+    },
+
+    scrollToBottom() {
+        this.chatHistory.scrollTop = this.chatHistory.scrollHeight;
+    },
+
+    addXp(amount) {
+        this.stats.xp += amount;
+        if (this.stats.xp >= 100) {
+            this.stats.level++;
+            this.stats.xp = 0;
+            this.levelDisplay.textContent = this.stats.level;
+            this.addBotMessage(`LEVEL UP! I am now Level ${this.stats.level}! 🌟`);
+            this.playRobotSound('activate');
+        }
+    },
+
+    decayStats() {
+        this.stats.happiness = Math.max(0, this.stats.happiness - 5);
+        this.stats.energy = Math.max(0, this.stats.energy - 2);
+        this.updateMoodDisplay();
+    },
+
+    getMood() {
+        if (this.stats.happiness > 80) return "Ecstatic 🤩";
+        if (this.stats.happiness > 50) return "Happy 😺";
+        if (this.stats.happiness > 20) return "Bored 😐";
+        return "Sad 😢";
+    },
+
+    updateMoodDisplay() {
+        this.moodDisplay.textContent = this.getMood();
     },
 
     resetIdleTimer() {
         if (!this.isVisible) return;
-
         clearTimeout(this.idleTimer);
         this.idleTimer = setTimeout(() => {
             if (this.isVisible) {
-                this.speak("Entering sleep mode to save energy... 💤");
+                this.addBotMessage("Entering sleep mode... 💤");
                 setTimeout(() => this.toggleVisibility(), 2000);
             }
-        }, 30000); // 30 seconds idle
+        }, 60000);
     },
 
     trackEyes(mouseX, mouseY) {
-        if (!this.orb) return;
-
+        const eyes = document.querySelectorAll('.eye');
         const rect = this.orb.getBoundingClientRect();
         const centerX = rect.left + rect.width / 2;
         const centerY = rect.top + rect.height / 2;
-
         const angle = Math.atan2(mouseY - centerY, mouseX - centerX);
         const distance = Math.min(5, Math.hypot(mouseX - centerX, mouseY - centerY) / 20);
-
         const eyeX = Math.cos(angle) * distance;
         const eyeY = Math.sin(angle) * distance;
-
-        this.eyes.forEach(eye => {
-            eye.style.transform = `translate(${eyeX}px, ${eyeY}px)`;
-        });
+        eyes.forEach(eye => eye.style.transform = `translate(${eyeX}px, ${eyeY}px)`);
     },
 
     happyJump() {
         this.orb.style.animation = 'none';
-        this.orb.offsetHeight; /* trigger reflow */
+        this.orb.offsetHeight;
         this.orb.style.animation = 'familiarJump 0.5s ease';
-        setTimeout(() => {
-            this.orb.style.animation = 'familiarFloat 4s ease-in-out infinite';
-        }, 500);
-    },
-
-    speak(message) {
-        this.isSpeaking = true;
-        this.text.style.display = 'none';
-        this.dots.style.display = 'flex';
-        this.dialogue.classList.add('active');
-        this.playRobotSound('talk');
-
-        // Simulate typing
-        setTimeout(() => {
-            this.dots.style.display = 'none';
-            this.text.textContent = message;
-            this.text.style.display = 'block';
-
-            // Hide after delay
-            setTimeout(() => {
-                this.dialogue.classList.remove('active');
-                this.isSpeaking = false;
-            }, 5000);
-        }, 1000);
+        setTimeout(() => this.orb.style.animation = 'familiarFloat 4s ease-in-out infinite', 500);
     },
 
     playRobotSound(type) {
@@ -1428,7 +1561,6 @@ const aiFamiliar = {
         const now = audioCtx.currentTime;
         const oscillator = audioCtx.createOscillator();
         const gainNode = audioCtx.createGain();
-
         oscillator.connect(gainNode);
         gainNode.connect(audioCtx.destination);
 
@@ -1461,7 +1593,6 @@ const aiFamiliar = {
                 oscillator.stop(now + 0.1);
                 break;
             case 'talk':
-                // Rapid random beeps
                 for (let i = 0; i < 5; i++) {
                     const osc = audioCtx.createOscillator();
                     const gn = audioCtx.createGain();
@@ -1474,8 +1605,6 @@ const aiFamiliar = {
                     osc.start(now + i * 0.05);
                     osc.stop(now + i * 0.05 + 0.03);
                 }
-                break;
-            default:
                 break;
         }
     }
