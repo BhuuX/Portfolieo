@@ -788,10 +788,10 @@ if (contactForm) {
         submitBtn.disabled = true;
         playSound('summoning');
 
-        // Wait for animation then submit
+        // Wait for animation then submit (Slower processing feel)
         setTimeout(() => {
             this.submit();
-        }, 1500);
+        }, 3000);
     });
 }
 
@@ -1166,11 +1166,14 @@ console.log('%c🔮 Explore the secrets hidden within the source...', 'font-size
 
 // Final initialization
 document.addEventListener('DOMContentLoaded', () => {
-    // Trigger initial animations
-    setTimeout(() => {
-        playSound('load');
-        showNotification('Welcome to BhuuX Portfolio! ✨', 'info');
-    }, 2000);
+    // Only show welcome message if NOT returning from form submission
+    if (!window.location.search.includes('success=true')) {
+        // Trigger initial animations with longer delay
+        setTimeout(() => {
+            playSound('load');
+            showNotification('Welcome to BhuuX Portfolio! ✨', 'info');
+        }, 3500);
+    }
 });
 
 // Performance monitoring
