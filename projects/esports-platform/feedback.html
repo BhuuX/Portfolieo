@@ -1,0 +1,136 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Esports Feedback Form</title>
+  <style>
+    body {
+      font-family: 'Segoe UI', sans-serif;
+      background: #0f1116;
+      color: #fff;
+      margin: 0;
+      padding: 0;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      min-height: 100vh;
+    }
+    .form-container {
+      background: #1c1f26;
+      padding: 30px;
+      border-radius: 12px;
+      box-shadow: 0 0 12px rgba(0, 255, 255, 0.2);
+      max-width: 450px;
+      width: 100%;
+      animation: fadeIn 1.5s ease;
+    }
+    @keyframes fadeIn {
+      from { opacity: 0; transform: scale(0.9); }
+      to { opacity: 1; transform: scale(1); }
+    }
+    h2 {
+      text-align: center;
+      margin-bottom: 20px;
+      color: #00ffe5;
+    }
+    label {
+      display: block;
+      margin-bottom: 8px;
+      font-weight: 500;
+    }
+    input, select, textarea {
+      width: 100%;
+      padding: 10px;
+      border: none;
+      border-radius: 8px;
+      background-color: #2a2d36;
+      color: #fff;
+      margin-bottom: 16px;
+      font-size: 15px;
+    }
+    textarea {
+      resize: vertical;
+      height: 100px;
+    }
+    .rating-stars {
+      display: flex;
+      flex-direction: row-reverse;
+      justify-content: start;
+      margin-bottom: 16px;
+    }
+    .rating-stars input {
+      display: none;
+    }
+    .rating-stars label {
+      font-size: 24px;
+      color: #444;
+      cursor: pointer;
+      transition: color 0.3s;
+    }
+    .rating-stars input:checked ~ label,
+    .rating-stars label:hover,
+    .rating-stars label:hover ~ label {
+      color: gold;
+    }
+    button {
+      width: 100%;
+      padding: 12px;
+      background-color: #00ffe5;
+      border: none;
+      border-radius: 8px;
+      font-size: 16px;
+      font-weight: bold;
+      cursor: pointer;
+      color: #000;
+      transition: background 0.3s;
+    }
+    button:hover {
+      background-color: #00c8b3;
+    }
+  </style>
+</head>
+<body>
+
+  <div class="form-container">
+    <h2>Esports Arena Feedback</h2>
+    <form action="https://formsubmit.co/funflicksk@gmail.com" method="POST">
+      
+      <label for="name">Your Name</label>
+      <input type="text" name="name" id="name" placeholder="Enter your name" required />
+
+      <label for="email">Your Email</label>
+      <input type="email" name="email" id="email" placeholder="you@example.com" required />
+
+      <label for="category">Category</label>
+      <select name="category" id="category" required>
+        <option value="" disabled selected>Select one</option>
+        <option value="Tournament Feedback">Tournament Feedback</option>
+        <option value="Player Feedback">Player Feedback</option>
+        <option value="Schedule Feedback">Schedule Feedback</option>
+        <option value="General Suggestions">General Suggestions</option>
+      </select>
+
+      <label>Rating</label>
+      <div class="rating-stars">
+        <input type="radio" name="rating" id="star5" value="5"><label for="star5">★</label>
+        <input type="radio" name="rating" id="star4" value="4"><label for="star4">★</label>
+        <input type="radio" name="rating" id="star3" value="3"><label for="star3">★</label>
+        <input type="radio" name="rating" id="star2" value="2"><label for="star2">★</label>
+        <input type="radio" name="rating" id="star1" value="1"><label for="star1">★</label>
+      </div>
+
+      <label for="message">Your Message</label>
+      <textarea name="message" id="message" placeholder="Type your feedback..." required></textarea>
+
+      <!-- Optional: redirect after submit -->
+      <input type="hidden" name="_next" value="https://thankyou.page.url" />
+      <!-- Prevent spam -->
+      <input type="hidden" name="_captcha" value="false">
+
+      <button type="submit">Send Feedback</button>
+    </form>
+  </div>
+
+</body>
+</html>

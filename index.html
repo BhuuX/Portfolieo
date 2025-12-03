@@ -1,0 +1,976 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>BhuuX | Portfolio</title>
+
+    <!-- Premium Fonts -->
+    <link
+        href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@300;400;500;600;700&family=JetBrains+Mono:wght@400;500;600&family=Bebas+Neue&display=swap"
+        rel="stylesheet">
+
+    <!-- Font Awesome -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+
+    <!-- AOS Animation Library -->
+    <link href="https://unpkg.com/aos@2.3.1/dist/aos.css" rel="stylesheet">
+
+    <!-- Swiper CSS -->
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/swiper@10/swiper-bundle.min.css" />
+
+    <!-- CSS -->
+    <link rel="stylesheet" href="style.css">
+
+    <!-- Meta Tags for SEO -->
+    <meta name="description"
+        content="BhuuX - Digital alchemist transforming code into extraordinary experiences that blur reality and imagination">
+    <meta name="keywords"
+        content="BhuuX, digital alchemist, creative developer, full stack, web design, ux/ui, digital experiences">
+    <meta name="author" content="BhuuX">
+
+    <!-- Open Graph -->
+    <meta property="og:title" content="Your Name | Digital Alchemist">
+    <meta property="og:description" content="Transforming code into extraordinary experiences">
+    <meta property="og:image" content="Pic.jpg">
+    <meta property="og:type" content="website">
+
+    <!-- Favicon -->
+    <link rel="icon" type="image/x-icon"
+        href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>🧙‍♂️</text></svg>">
+    <script src="https://sites.super.myninja.ai/_assets/ninja-daytona-script.js"></script>
+</head>
+
+<body class="dark-mode">
+    <!-- Loading Screen -->
+    <div class="loading-screen" id="loadingScreen">
+        <div class="loader">
+            <div class="loader-cube">
+                <div class="cube-face cube-front"></div>
+                <div class="cube-face cube-back"></div>
+                <div class="cube-face cube-left"></div>
+                <div class="cube-face cube-right"></div>
+                <div class="cube-face cube-top"></div>
+                <div class="cube-face cube-bottom"></div>
+            </div>
+            <div class="loader-text">Welcome to BhuuX Portfolio...</div>
+            <div class="loader-progress">
+                <div class="progress-bar"></div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Advanced Custom Cursor -->
+    <div class="custom-cursor" id="cursor">
+        <div class="cursor-dot"></div>
+        <div class="cursor-ring"></div>
+    </div>
+    <div class="cursor-trail" id="cursorTrail"></div>
+
+    <!-- Multi-Layer Background System -->
+    <canvas id="particleCanvas" class="particle-bg"></canvas>
+    <canvas id="matrixCanvas" class="matrix-bg"></canvas>
+    <div class="gradient-mesh"></div>
+    <div class="aurora-bg"></div>
+    <div class="noise-overlay"></div>
+    <div class="floating-shapes">
+        <div class="shape shape-1"></div>
+        <div class="shape shape-2"></div>
+        <div class="shape shape-3"></div>
+        <div class="shape shape-4"></div>
+        <div class="shape shape-5"></div>
+    </div>
+
+    <!-- Navigation -->
+    <nav class="navbar" id="navbar">
+        <div class="nav-container">
+            <div class="nav-logo">
+                <a href="index.html" style="text-decoration: none;">
+                    <div class="logo-3d">
+                        <div class="logo-text" data-text="BHUUX">BHUUX</div>
+                        <div class="logo-particles">
+                            <span class="particle"></span>
+                            <span class="particle"></span>
+                            <span class="particle"></span>
+                            <span class="particle"></span>
+                            <span class="particle"></span>
+                        </div>
+                    </div>
+                </a>
+            </div>
+
+            <ul class="nav-menu" id="navMenu">
+                <li class="nav-item">
+                    <a href="#home" class="nav-link">
+                        <span class="nav-text">Home</span>
+                        <span class="nav-icon"><i class="fas fa-home"></i></span>
+                        <div class="nav-underline"></div>
+                    </a>
+                </li>
+                <li class="nav-item">
+                    <a href="#about" class="nav-link">
+                        <span class="nav-text">About</span>
+                        <span class="nav-icon"><i class="fas fa-book"></i></span>
+                        <div class="nav-underline"></div>
+                    </a>
+                </li>
+                <li class="nav-item">
+                    <a href="#skills" class="nav-link">
+                        <span class="nav-text">Skills</span>
+                        <span class="nav-icon"><i class="fas fa-tools"></i></span>
+                        <div class="nav-underline"></div>
+                    </a>
+                </li>
+                <li class="nav-item">
+                    <a href="#projects" class="nav-link">
+                        <span class="nav-text">Projects</span>
+                        <span class="nav-icon"><i class="fas fa-rocket"></i></span>
+                        <div class="nav-underline"></div>
+                    </a>
+                </li>
+                <li class="nav-item">
+                    <a href="#timeline" class="nav-link">
+                        <span class="nav-text">Timeline</span>
+                        <span class="nav-icon"><i class="fas fa-timeline"></i></span>
+                        <div class="nav-underline"></div>
+                    </a>
+                </li>
+                <li class="nav-item">
+                    <a href="#contact" class="nav-link">
+                        <span class="nav-text">Contact</span>
+                        <span class="nav-icon"><i class="fas fa-envelope"></i></span>
+                        <div class="nav-underline"></div>
+                    </a>
+                </li>
+            </ul>
+
+            <div class="nav-actions">
+                <button class="sound-toggle" id="soundToggle">
+                    <i class="fas fa-volume-up" id="soundIcon"></i>
+                </button>
+                <button class="theme-toggle" id="themeToggle">
+                    <i class="fas fa-moon" id="themeIcon"></i>
+                </button>
+                <div class="hamburger" id="hamburger">
+                    <span class="bar"></span>
+                    <span class="bar"></span>
+                    <span class="bar"></span>
+                </div>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Hero Section -->
+    <section id="home" class="hero">
+        <div class="hero-constellation"></div>
+        <div class="hero-grid-overlay"></div>
+        <div class="hero-container">
+            <div class="hero-content">
+                <div class="hero-left">
+                    <div class="hero-pretext">
+                        <span class="greeting">✨ Digital Alchemist at Work</span>
+                        <div class="status-indicator">
+                            <span class="status-pulse"></span>
+                            <span class="status-text">Transmuting Ideas into Reality</span>
+                        </div>
+                    </div>
+
+                    <h1 class="hero-title">
+                        <span class="title-line">I Am</span>
+                        <span class="title-line main-name">
+                            <span class="glitch-text" data-text="BhuuX">BhuuX</span>
+                        </span>
+                        <span class="title-line role">
+                            <span id="typingText"></span>
+                            <span class="cursor-blink">◆</span>
+                        </span>
+                    </h1>
+
+                    <p class="hero-description">
+                        Hi, I'm <span class="highlight">Bhuu</span> — a creative developer and designer who blends art
+                        with code.
+                        I design and build <span class="highlight">smooth, modern interfaces</span> that feel as good as
+                        they look.
+                        Crafting the <span class="highlight">impossible</span> one line at a time.
+                    </p>
+
+                    <div class="hero-stats">
+                        <div class="stat-item">
+                            <div class="stat-number" data-count="500">0</div>
+                            <div class="stat-label">Digital Spells Cast</div>
+                            <div class="stat-sparkle">✨</div>
+                        </div>
+                        <div class="stat-item">
+                            <div class="stat-number" data-count="10">0</div>
+                            <div class="stat-label">Years of Mastery</div>
+                            <div class="stat-sparkle">⚡</div>
+                        </div>
+                        <div class="stat-item">
+                            <div class="stat-number" data-count="100">0</div>
+                            <div class="stat-label">Souls Inspired</div>
+                            <div class="stat-sparkle">🔮</div>
+                        </div>
+                    </div>
+
+                    <div class="hero-buttons">
+                        <a href="#contact" class="btn btn-primary quantum-btn">
+                            <span class="btn-content">
+                                <span class="btn-text">Begin Your Journey</span>
+                                <i class="fas fa-magic"></i>
+                                <div class="btn-particles"></div>
+                            </span>
+                            <div class="btn-glow"></div>
+                        </a>
+                        <a href="#projects" class="btn btn-secondary quantum-btn">
+                            <span class="btn-content">
+                                <span class="btn-text">View My Grimoire</span>
+                                <i class="fas fa-book-open"></i>
+                                <div class="btn-particles"></div>
+                            </span>
+                            <div class="btn-glow"></div>
+                        </a>
+                        <a href="resume.html" class="btn btn-secondary quantum-btn" target="_blank">
+                            <span class="btn-content">
+                                <span class="btn-text">View Resume</span>
+                                <i class="fas fa-file-alt"></i>
+                                <div class="btn-particles"></div>
+                            </span>
+                            <div class="btn-glow"></div>
+                        </a>
+                    </div>
+                </div>
+
+                <div class="hero-right">
+                    <div class="hero-3d-container">
+                        <div class="hologram-frame">
+                            <img src="Pic.jpg" alt="BhuuX" class="hero-image-3d">
+                            <div class="hologram-overlay"></div>
+                            <div class="frame-corners">
+                                <div class="corner corner-tl"></div>
+                                <div class="corner corner-tr"></div>
+                                <div class="corner corner-bl"></div>
+                                <div class="corner corner-br"></div>
+                            </div>
+                            <div class="scanlines"></div>
+                            <div class="hologram-glitch"></div>
+                        </div>
+                        <div class="floating-orbs">
+                            <div class="orb orb-1">
+                                <div class="orb-inner">
+                                    <i class="fab fa-react"></i>
+                                </div>
+                                <div class="orb-ring"></div>
+                            </div>
+                            <div class="orb orb-2">
+                                <div class="orb-inner">
+                                    <i class="fab fa-node-js"></i>
+                                </div>
+                                <div class="orb-ring"></div>
+                            </div>
+                            <div class="orb orb-3">
+                                <div class="orb-inner">
+                                    <i class="fab fa-python"></i>
+                                </div>
+                                <div class="orb-ring"></div>
+                            </div>
+                            <div class="orb orb-4">
+                                <div class="orb-inner">
+                                    <i class="fas fa-brain"></i>
+                                </div>
+                                <div class="orb-ring"></div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="scroll-enchanted">
+            <div class="scroll-particle"></div>
+            <div class="scroll-text">Descend into the digital realm</div>
+            <div class="scroll-portal">
+                <div class="portal-ring"></div>
+                <div class="portal-core"></div>
+            </div>
+        </div>
+    </section>
+
+    <!-- About Section -->
+    <section id="about" class="about">
+        <div class="section-cosmic-bg"></div>
+        <div class="container">
+            <div class="section-header">
+                <h2 class="section-title">
+                    <span class="title-main">The Alchemist's Chronicle</span>
+                    <span class="title-sub">A tale of digital transformation</span>
+                </h2>
+                <div class="section-divider">
+                    <div class="divider-line"></div>
+                    <div class="divider-crystal">
+                        <i class="fas fa-gem"></i>
+                    </div>
+                    <div class="divider-line"></div>
+                </div>
+            </div>
+
+            <div class="about-content">
+                <div class="about-left">
+                    <div class="about-text">
+                        <p class="intro-text">
+                            I am not merely a developer—I am a <span class="glow-text">digital alchemist</span>
+                            who transmutes <span class="glow-text">ideas into gold</span>.
+                        </p>
+                        <p>
+                            I'm a passionate programmer and designer who loves working with modern web technologies.
+                            My goal is to build websites and applications that are functional, fast, and visually
+                            engaging.
+                        </p>
+                        <p>
+                            I create video edits on my phone using Alight Motion and Node, and I polish my photos in
+                            Lightroom
+                            to match the mood I imagine. When I'm not coding, you’ll usually find me making edits,
+                            gaming,
+                            or turning random ideas into full projects.
+                        </p>
+                    </div>
+
+                    <div class="alchemy-powers">
+                        <div class="power-card">
+                            <div class="power-icon">
+                                <div class="icon-circle">
+                                    <i class="fas fa-atom"></i>
+                                </div>
+                            </div>
+                            <div class="power-content">
+                                <h4>Elemental Coding</h4>
+                                <p>Mastering the fundamental elements of web development</p>
+                                <div class="power-level">
+                                    <div class="level-bar" style="width: 95%"></div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="power-card">
+                            <div class="power-icon">
+                                <div class="icon-circle">
+                                    <i class="fas fa-eye"></i>
+                                </div>
+                            </div>
+                            <div class="power-content">
+                                <h4>Design Vision</h4>
+                                <p>Seeing beyond pixels to create immersive experiences</p>
+                                <div class="power-level">
+                                    <div class="level-bar" style="width: 90%"></div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="power-card">
+                            <div class="power-icon">
+                                <div class="icon-circle">
+                                    <i class="fas fa-infinity"></i>
+                                </div>
+                            </div>
+                            <div class="power-content">
+                                <h4>Infinite Innovation</h4>
+                                <p>Pushing the boundaries of what's digitally possible</p>
+                                <div class="power-level">
+                                    <div class="level-bar" style="width: 100%"></div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="about-right">
+                    <div class="alchemy-info-card">
+                        <div class="card-header">
+                            <h3>The Alchemist's Data</h3>
+                            <div class="mystic-symbol">☿</div>
+                        </div>
+                        <div class="info-grid">
+                            <div class="info-item">
+                                <span class="info-label">
+                                    <i class="fas fa-signature"></i> True Name
+                                </span>
+                                <span class="info-value">BhuuX</span>
+                            </div>
+                            <div class="info-item">
+                                <span class="info-label">
+                                    <i class="fas fa-dove"></i> Digital Spirit
+                                </span>
+                                <span class="info-value available">Ready to Create</span>
+                            </div>
+                            <div class="info-item">
+                                <span class="info-label">
+                                    <i class="fas fa-map-marked-alt"></i> Realm
+                                </span>
+                                <span class="info-value">Digital Nexus</span>
+                            </div>
+                            <div class="info-item">
+                                <span class="info-label">
+                                    <i class="fas fa-envelope"></i> Email
+                                </span>
+                                <a href="https://mail.google.com/mail/?view=cm&fs=1&to=bhuux.in@gmail.com&su=Business%20Inquiry&body=Hello%2C%20I%20saw%20your%20work%20and%20I%20would%20like%20to%20discuss%20a%20project%20with%20you."
+                                    target="_blank" class="info-value">bhuux.in@gmail.com</a>
+                            </div>
+                        </div>
+
+                        <div class="social-portal">
+                            <div class="portal-title">Enter My Realms</div>
+                            <div class="social-links-3d">
+                                <a href="https://github.com/BhuuX" target="_blank" class="social-link-3d"
+                                    data-portal="github">
+                                    <div class="link-icon"><i class="fab fa-github"></i></div>
+                                    <div class="link-portal"></div>
+                                </a>
+                                <a href="https://www.instagram.com/bhuu.in_" target="_blank" class="social-link-3d"
+                                    data-portal="instagram">
+                                    <div class="link-icon"><i class="fab fa-instagram"></i></div>
+                                    <div class="link-portal"></div>
+                                </a>
+                                <a href="https://www.threads.com/@programmer_elow" target="_blank"
+                                    class="social-link-3d" data-portal="threads">
+                                    <div class="link-icon"><i class="fab fa-threads"></i></div>
+                                    <div class="link-portal"></div>
+                                </a>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Skills Section -->
+    <section id="skills" class="skills">
+        <div class="container">
+            <div class="section-header">
+                <h2 class="section-title">
+                    <span class="title-main">The Alchemist's Arsenal</span>
+                    <span class="title-sub">Powers and spells I command</span>
+                </h2>
+                <div class="section-divider">
+                    <div class="divider-line"></div>
+                    <div class="divider-crystal">
+                        <i class="fas fa-flask"></i>
+                    </div>
+                    <div class="divider-line"></div>
+                </div>
+            </div>
+
+            <div class="skills-3d-container">
+                <div class="skill-sphere" data-aos="zoom-in" data-aos-delay="100">
+                    <div class="sphere-header">
+                        <div class="sphere-icon">
+                            <i class="fas fa-fire"></i>
+                            <div class="icon-aura"></div>
+                        </div>
+                        <h3>Frontend Transmutation</h3>
+                        <div class="power-badge">Mastery</div>
+                    </div>
+                    <div class="skill-elixirs">
+                        <div class="elixir-item">
+                            <div class="elixir-icon">⚛️</div>
+                            <div class="elixir-info">
+                                <span class="elixir-name">React Sorcery</span>
+                                <div class="elixir-bar">
+                                    <div class="elixir-fill" data-fill="98"></div>
+                                    <div class="elixir-bubbles"></div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="elixir-item">
+                            <div class="elixir-icon">🎨</div>
+                            <div class="elixir-info">
+                                <span class="elixir-name">CSS Enchantments</span>
+                                <div class="elixir-bar">
+                                    <div class="elixir-fill" data-fill="95"></div>
+                                    <div class="elixir-bubbles"></div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="elixir-item">
+                            <div class="elixir-icon">⚡</div>
+                            <div class="elixir-info">
+                                <span class="elixir-name">JavaScript Magic</span>
+                                <div class="elixir-bar">
+                                    <div class="elixir-fill" data-fill="92"></div>
+                                    <div class="elixir-bubbles"></div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="skill-sphere" data-aos="zoom-in" data-aos-delay="200">
+                    <div class="sphere-header">
+                        <div class="sphere-icon">
+                            <i class="fas fa-server"></i>
+                            <div class="icon-aura"></div>
+                        </div>
+                        <h3>Backend Alchemy</h3>
+                        <div class="power-badge">Expert</div>
+                    </div>
+                    <div class="skill-elixirs">
+                        <div class="elixir-item">
+                            <div class="elixir-icon">🟢</div>
+                            <div class="elixir-info">
+                                <span class="elixir-name">Node.js Rituals</span>
+                                <div class="elixir-bar">
+                                    <div class="elixir-fill" data-fill="88"></div>
+                                    <div class="elixir-bubbles"></div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="elixir-item">
+                            <div class="elixir-icon">🐍</div>
+                            <div class="elixir-info">
+                                <span class="elixir-name">Python Spells</span>
+                                <div class="elixir-bar">
+                                    <div class="elixir-fill" data-fill="85"></div>
+                                    <div class="elixir-bubbles"></div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="elixir-item">
+                            <div class="elixir-icon">🗄️</div>
+                            <div class="elixir-info">
+                                <span class="elixir-name">Database Potions</span>
+                                <div class="elixir-bar">
+                                    <div class="elixir-fill" data-fill="82"></div>
+                                    <div class="elixir-bubbles"></div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="skill-sphere" data-aos="zoom-in" data-aos-delay="300">
+                    <div class="sphere-header">
+                        <div class="sphere-icon">
+                            <i class="fas fa-crown"></i>
+                            <div class="icon-aura"></div>
+                        </div>
+                        <h3>Legendary Artifacts</h3>
+                        <div class="power-badge">Divine</div>
+                    </div>
+                    <div class="skill-elixirs">
+                        <div class="elixir-item">
+                            <div class="elixir-icon">🐳</div>
+                            <div class="elixir-info">
+                                <span class="elixir-name">Container Magic</span>
+                                <div class="elixir-bar">
+                                    <div class="elixir-fill" data-fill="85"></div>
+                                    <div class="elixir-bubbles"></div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="elixir-item">
+                            <div class="elixir-icon">☁️</div>
+                            <div class="elixir-info">
+                                <span class="elixir-name">Cloud Weaving</span>
+                                <div class="elixir-bar">
+                                    <div class="elixir-fill" data-fill="80"></div>
+                                    <div class="elixir-bubbles"></div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="elixir-item">
+                            <div class="elixir-icon">🔮</div>
+                            <div class="elixir-info">
+                                <span class="elixir-name">AI Conjuring</span>
+                                <div class="elixir-bar">
+                                    <div class="elixir-fill" data-fill="90"></div>
+                                    <div class="elixir-bubbles"></div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Projects Section -->
+    <section id="projects" class="projects">
+        <div class="container">
+            <div class="section-header">
+                <h2 class="section-title">
+                    <span class="title-main">Grimoire of Creations</span>
+                    <span class="title-sub">Masterpieces forged in digital fire</span>
+                </h2>
+                <div class="section-divider">
+                    <div class="divider-line"></div>
+                    <div class="divider-crystal">
+                        <i class="fas fa-book-spells"></i>
+                    </div>
+                    <div class="divider-line"></div>
+                </div>
+            </div>
+
+            <div class="projects-3d-showcase">
+                <div class="project-crystal" data-aos="flip-left" data-aos-delay="100">
+                    <div class="crystal-frame">
+                        <div class="project-hologram">
+                            <div class="hologram-layer layer-1">
+                                <div class="project-icon">🎮</div>
+                            </div>
+                            <div class="hologram-layer layer-2">
+                                <div class="project-number">01</div>
+                            </div>
+                            <div class="hologram-layer layer-3">
+                                <div class="tech-runes">
+                                    <span>Frontend</span>
+                                    <span>UX</span>
+                                    <span>Esports</span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="project-essence">
+                        <h3 class="project-title">Esports Arena Website</h3>
+                        <p class="project-description">
+                            Full esports tournament page with player cards, MVP system,
+                            schedules and a premium main UI for arena events.
+                        </p>
+                        <div class="project-metrics">
+                            <div class="metric">
+                                <span class="metric-value">Premium</span>
+                                <span class="metric-label">UI Design</span>
+                            </div>
+                            <div class="metric">
+                                <span class="metric-value">Dynamic</span>
+                                <span class="metric-label">Content</span>
+                            </div>
+                        </div>
+                        <div class="project-portals">
+                            <a href="projects/esports-platform/index.html" class="portal-btn" target="_blank">
+                                <span>Enter Experience</span>
+                                <i class="fas fa-portal-enter"></i>
+                            </a>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="project-crystal" data-aos="flip-right" data-aos-delay="200">
+                    <div class="crystal-frame">
+                        <div class="project-hologram">
+                            <div class="hologram-layer layer-1">
+                                <div class="project-icon">🛠️</div>
+                            </div>
+                            <div class="hologram-layer layer-2">
+                                <div class="project-number">02</div>
+                            </div>
+                            <div class="hologram-layer layer-3">
+                                <div class="tech-runes">
+                                    <span>Dashboard</span>
+                                    <span>Logic</span>
+                                    <span>Sync</span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="project-essence">
+                        <h3 class="project-title">Esports Admin Panel</h3>
+                        <p class="project-description">
+                            Admin dashboard to manage players, tournaments, earnings
+                            and schedules with localStorage syncing.
+                        </p>
+                        <div class="project-metrics">
+                            <div class="metric">
+                                <span class="metric-value">Real-time</span>
+                                <span class="metric-label">Sync</span>
+                            </div>
+                            <div class="metric">
+                                <span class="metric-value">Secure</span>
+                                <span class="metric-label">Management</span>
+                            </div>
+                        </div>
+                        <div class="project-portals">
+                            <a href="projects/admin-panel/admin-login.html" class="portal-btn" target="_blank">
+                                <span>Enter Experience</span>
+                                <i class="fas fa-portal-enter"></i>
+                            </a>
+                        </div>
+                    </div>
+                </div>
+
+
+                <div class="project-crystal" data-aos="flip-left" data-aos-delay="300">
+                    <div class="crystal-frame">
+                        <div class="project-hologram">
+                            <div class="hologram-layer layer-1">
+                                <div class="project-icon">☁️</div>
+                            </div>
+                            <div class="hologram-layer layer-2">
+                                <div class="project-number">03</div>
+                            </div>
+                            <div class="hologram-layer layer-3">
+                                <div class="tech-runes">
+                                    <span>UI</span>
+                                    <span>Stats</span>
+                                    <span>AI</span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="project-essence">
+                        <h3 class="project-title">Cloud Dashboard</h3>
+                        <p class="project-description">
+                            Futuristic dashboard layout explaining cloud concepts with
+                            cards, stats and AI sections.
+                        </p>
+                        <div class="project-metrics">
+                            <div class="metric">
+                                <span class="metric-value">Future</span>
+                                <span class="metric-label">Ready</span>
+                            </div>
+                            <div class="metric">
+                                <span class="metric-value">Data</span>
+                                <span class="metric-label">Viz</span>
+                            </div>
+                        </div>
+                        <div class="project-portals">
+                            <a href="projects/cloud-dashboard/index.html" class="portal-btn" target="_blank">
+                                <span>Enter Experience</span>
+                                <i class="fas fa-portal-enter"></i>
+                            </a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Timeline Section -->
+    <section id="timeline" class="timeline">
+        <div class="container">
+            <div class="section-header">
+                <h2 class="section-title">
+                    <span class="title-main">The Digital Odyssey</span>
+                    <span class="title-sub">My journey through the realms of code</span>
+                </h2>
+                <div class="section-divider">
+                    <div class="divider-line"></div>
+                    <div class="divider-crystal">
+                        <i class="fas fa-infinity"></i>
+                    </div>
+                    <div class="divider-line"></div>
+                </div>
+            </div>
+
+            <div class="timeline-3d">
+                <div class="timeline-track"></div>
+                <div class="timeline-nodes">
+                    <div class="timeline-node" data-aos="fade-right">
+                        <div class="node-marker">
+                            <div class="node-core">
+                                <i class="fas fa-code-branch"></i>
+                            </div>
+                            <div class="node-ring"></div>
+                        </div>
+                        <div class="node-content">
+                            <div class="node-date">2025</div>
+                            <h3>Full Stack & Creative Dev</h3>
+                            <p>Building complex ecosystems like the <strong>Esports Arena</strong> and <strong>Cloud
+                                    Dashboards</strong>. Mastering Node.js, advanced UI animations, and backend logic to
+                                create complete digital experiences.</p>
+                            <div class="node-glow"></div>
+                        </div>
+                    </div>
+
+                    <div class="timeline-node" data-aos="fade-left">
+                        <div class="node-marker">
+                            <div class="node-core">
+                                <i class="fas fa-layer-group"></i>
+                            </div>
+                            <div class="node-ring"></div>
+                        </div>
+                        <div class="node-content">
+                            <div class="node-date">2024</div>
+                            <h3>Project Expansion</h3>
+                            <p>Launched 10+ projects including Admin Panels and Feedback Forms. Deepened expertise in
+                                <strong>JavaScript</strong> and <strong>Database Management</strong>, turning static
+                                pages into dynamic applications.
+                            </p>
+                            <div class="node-glow"></div>
+                        </div>
+                    </div>
+
+                    <div class="timeline-node" data-aos="fade-right">
+                        <div class="node-marker">
+                            <div class="node-core">
+                                <i class="fas fa-paint-brush"></i>
+                            </div>
+                            <div class="node-ring"></div>
+                        </div>
+                        <div class="node-content">
+                            <div class="node-date">2023</div>
+                            <h3>The Foundation</h3>
+                            <p>Started the journey with HTML, CSS, and Design tools (Ps, Ai). Created the first version
+                                of my portfolio and mini-apps like the <strong>Digital Clock</strong> and <strong>Vote
+                                    Counter</strong>.</p>
+                            <div class="node-glow"></div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Contact Section -->
+    <section id="contact" class="contact">
+        <div class="container">
+            <div class="section-header">
+                <h2 class="section-title">
+                    <span class="title-main">Summon the Alchemist</span>
+                    <span class="title-sub">Let's create digital magic together</span>
+                </h2>
+                <div class="section-divider">
+                    <div class="divider-line"></div>
+                    <div class="divider-crystal">
+                        <i class="fas fa-hat-wizard"></i>
+                    </div>
+                    <div class="divider-line"></div>
+                </div>
+            </div>
+
+            <div class="contact-matrix">
+                <div class="contact-left">
+                    <div class="summoning-circle">
+                        <div class="circle-outer"></div>
+                        <div class="circle-middle"></div>
+                        <div class="circle-inner">
+                            <div class="summoning-text">
+                                <h3>Ready to Begin the Ritual?</h3>
+                                <p>
+                                    Your ideas are the ingredients. My expertise is the catalyst.
+                                    Together, we'll transmute visions into digital reality that
+                                    transcends the boundaries of imagination.
+                                </p>
+                            </div>
+                        </div>
+                        <div class="mystic-symbols">
+                            <span class="symbol">☿</span>
+                            <span class="symbol">☽</span>
+                            <span class="symbol">☉</span>
+                            <span class="symbol">♄</span>
+                        </div>
+                    </div>
+
+                    <div class="contact-enchanted-methods">
+                        <div class="enchanted-method">
+                            <div class="method-crystal">
+                                <i class="fas fa-envelope"></i>
+                                <div class="crystal-glow"></div>
+                            </div>
+                            <div class="method-info">
+                                <h4>Email</h4>
+                                <a href="https://mail.google.com/mail/?view=cm&fs=1&to=bhuux.in@gmail.com&su=Business%20Inquiry&body=Hello%2C%20I%20saw%20your%20work%20and%20I%20would%20like%20to%20discuss%20a%20project%20with%20you."
+                                    target="_blank">bhuux.in@gmail.com</a>
+                            </div>
+                        </div>
+
+                        <div class="enchanted-method">
+                            <div class="method-crystal">
+                                <i class="fab fa-instagram"></i>
+                                <div class="crystal-glow"></div>
+                            </div>
+                            <div class="method-info">
+                                <h4>Instagram</h4>
+                                <a href="https://www.instagram.com/bhuu.in_" target="_blank">@bhuu.in_</a>
+                            </div>
+                        </div>
+
+                        <div class="enchanted-method">
+                            <div class="method-crystal">
+                                <i class="fas fa-map-marker-alt"></i>
+                                <div class="crystal-glow"></div>
+                            </div>
+                            <div class="method-info">
+                                <h4>Location</h4>
+                                <span>Karnataka, India</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="contact-right">
+                    <form class="summoning-form" id="contactForm" action="https://formsubmit.co/bhuux.in@gmail.com"
+                        method="POST">
+                        <!-- FormSubmit Configuration -->
+                        <input type="hidden" name="_captcha" value="false">
+                        <input type="hidden" name="_template" value="basic">
+                        <input type="hidden" name="_subject" value="New Message from BhuuX Portfolio">
+                        <input type="hidden" name="_next" value="http://localhost:8080/index.html?success=true">
+
+                        <div class="form-magic-header">
+                            <h3>Send Message</h3>
+                            <div class="magic-particles"></div>
+                        </div>
+
+                        <div class="form-row">
+                            <div class="form-group magic-input">
+                                <input type="text" id="name" name="name" required>
+                                <label for="name">Name</label>
+                                <div class="input-sparkle"></div>
+                            </div>
+                            <div class="form-group magic-input">
+                                <input type="email" id="email" name="email" required>
+                                <label for="email">Email</label>
+                                <div class="input-sparkle"></div>
+                            </div>
+                        </div>
+
+                        <div class="form-group magic-input">
+                            <input type="text" id="subject" name="subject" required>
+                            <label for="subject">Subject</label>
+                            <div class="input-sparkle"></div>
+                        </div>
+
+                        <div class="form-group magic-input">
+                            <textarea id="message" name="message" rows="5" required></textarea>
+                            <label for="message">Message</label>
+                            <div class="input-sparkle"></div>
+                        </div>
+
+                        <button type="submit" class="summon-btn">
+                            <span class="btn-text">Send Message</span>
+                            <div class="magic-effect"></div>
+                            <i class="fas fa-paper-plane"></i>
+                        </button>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer class="footer">
+        <div class="footer-cosmos">
+            <div class="cosmic-stars"></div>
+        </div>
+        <div class="container">
+            <div class="footer-content">
+                <div class="footer-left">
+                    <p>© 2025 BhuuX | Forged in Digital Fire 🔥</p>
+                    <p>Transmuting pixels into poetry, code into consciousness</p>
+                </div>
+                <div class="footer-right">
+                    <div class="footer-magic">
+                        <span class="magic-text">Crafted with</span>
+                        <span class="magic-hearts">💜✨⚡</span>
+                        <span class="magic-text">and a touch of magic</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </footer>
+
+    <!-- Scripts -->
+    <script src="https://unpkg.com/aos@2.3.1/dist/aos.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/swiper@10/swiper-bundle.min.js"></script>
+    <script src="script.js"></script>
+</body>
+
+</html>

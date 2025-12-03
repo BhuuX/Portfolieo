@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8"/>
+  <meta name="viewport" content="width=device-width,initial-scale=1"/>
+  <title>Player Register - Esports Arena</title>
+  <style>
+    body{ margin:0; font-family:"Segoe UI",Arial,sans-serif; background:linear-gradient(135deg,#070914,#0b1220); display:flex; align-items:center; justify-content:center; height:100vh; color:#fff; }
+    .register-box{ background:rgba(255,255,255,0.04); padding:30px; border-radius:16px; box-shadow:0 6px 20px rgba(0,0,0,0.5); text-align:center; width:320px; }
+    h1{ margin:0; font-size:1.8rem; color:#38bdf8; }
+    p{ font-size:0.9rem; color:#bbb; margin-bottom:20px; }
+    input{ width:100%; padding:12px; margin:8px 0; border-radius:8px; border:1px solid rgba(255,255,255,0.1); background:rgba(0,0,0,0.3); color:#fff; font-size:1rem; }
+    button{ width:100%; padding:12px; background:linear-gradient(90deg,#7c3aed,#06b6d4); border:none; border-radius:8px; color:#041014; font-weight:900; font-size:1rem; cursor:pointer; margin-top:12px; transition:0.2s; }
+    button:hover{ opacity:0.85; }
+    a{ color:#38bdf8; text-decoration:none; font-size:0.9rem; display:block; margin-top:12px; }
+  </style>
+</head>
+<body>
+  <div class="register-box">
+    <h1>Esports Arena</h1>
+    <p>Your Battlefield for Esports Glory.</p>
+    <input id="name" placeholder="Full Name"/>
+    <input id="email" type="email" placeholder="Email"/>
+    <input id="password" type="password" placeholder="Password"/>
+    <button onclick="register()">Register</button>
+    <a href="player-login.html">Already have an account? Login</a>
+  </div>
+
+<script>
+  function register(){
+    let players=JSON.parse(localStorage.getItem('players')||'[]');
+    let name=document.getElementById('name').value.trim();
+    let email=document.getElementById('email').value.trim();
+    let pass=document.getElementById('password').value.trim();
+    if(!name||!email||!pass){alert("Fill all fields");return;}
+    if(players.find(p=>p.email===email)){alert("Email already exists");return;}
+    players.push({name,email,password:pass,wins:0,tournaments:0,rank:"Unranked"});
+    localStorage.setItem('players',JSON.stringify(players));
+    alert("Registered successfully! Please login");
+    window.location="player-login.html";
+  }
+</script>
+</body>
+</html>

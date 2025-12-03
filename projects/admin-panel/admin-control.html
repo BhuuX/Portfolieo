@@ -1,0 +1,256 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8"/>
+  <meta name="viewport" content="width=device-width,initial-scale=1"/>
+  <title>Admin Panel - Esports Arena</title>
+  <style>
+    *{box-sizing:border-box}
+    body{
+      margin:0; font-family:"Segoe UI",Arial,sans-serif;
+      background: linear-gradient(135deg,#070914,#0b1220); color:#fff;
+      display:flex; overflow:hidden;
+    }
+    .sidebar{ width:240px; background:#0b1220; padding:14px; border-right:1px solid rgba(255,255,255,0.06); display:flex; flex-direction:column; }
+    .brand{ font-weight:900; color:#38bdf8; margin-bottom:12px; font-size:1.2rem; }
+    .nav-link{ padding:10px 8px; border-radius:8px; cursor:pointer; margin-bottom:6px; background:transparent; border:1px solid rgba(255,255,255,0.05); transition:0.2s; }
+    .nav-link:hover{ background:rgba(255,255,255,0.05); }
+    .nav-link.active{ background:linear-gradient(90deg,#06b6d4,#7c3aed); color:#041014; font-weight:800; }
+    .logout-btn{ margin-top:auto; padding:8px 10px; border-radius:8px; border:none; background:#ef4444; color:#fff; font-weight:800; cursor:pointer }
+
+    .main{ flex:1; display:flex; flex-direction:column; min-width:0; }
+    .topbar{ padding:14px 18px; border-bottom:1px solid rgba(255,255,255,0.04); display:flex; justify-content:space-between; align-items:center; font-size:1.1rem; font-weight:800; }
+    .content{ padding:16px; overflow:auto; }
+
+    .card{ background: rgba(255,255,255,0.03); border-radius:10px; padding:16px; margin-bottom:16px; border:1px solid rgba(255,255,255,0.05); box-shadow:0 4px 10px rgba(0,0,0,0.3); }
+    .row{ display:grid; grid-template-columns:repeat(auto-fit,minmax(200px,1fr)); gap:10px; }
+
+    input,select,button{ padding:8px; border-radius:8px; border:1px solid rgba(255,255,255,0.1); background:transparent; color:#fff }
+    button{ cursor:pointer; background: linear-gradient(90deg,#7c3aed,#06b6d4); color:#041014; font-weight:900; border:none; transition:0.2s }
+    button:hover{ opacity:0.85; }
+
+    .item{ display:grid; grid-template-columns:1fr auto auto; gap:8px; align-items:center; padding:8px; border-radius:8px; border:1px solid rgba(255,255,255,0.05); margin-top:8px; background:rgba(255,255,255,0.02); }
+    .danger{ background:linear-gradient(90deg,#ff8a8a,#ef4444); color:#fff; border:none; padding:6px 10px; border-radius:8px; cursor:pointer }
+    .pill{ display:inline-block; padding:4px 8px; border-radius:999px; background:rgba(255,255,255,0.08); font-weight:800; font-size:0.8rem; }
+
+    table { width:100%; border-collapse: collapse; margin-top:10px; }
+    th, td { border:1px solid rgba(255,255,255,0.1); padding:8px; text-align:left; font-size:0.9rem; }
+    th { background:rgba(255,255,255,0.1); }
+
+    @media (max-width:900px){ .sidebar{ display:none } }
+  </style>
+</head>
+<body>
+  <aside class="sidebar">
+    <div class="brand">⚡ Esports Admin</div>
+    <div class="nav-link active" onclick="show('dashboard')">Dashboard</div>
+    <div class="nav-link" onclick="show('players')">Players</div>
+    <div class="nav-link" onclick="show('tournaments')">Tournaments</div>
+    <div class="nav-link" onclick="show('schedule')">Schedule</div>
+    <div class="nav-link" onclick="show('registrations')">Registrations</div>
+    <div class="nav-link" onclick="show('earnings')">Earnings</div>
+    <button class="logout-btn" onclick="logout()">Logout</button>
+  </aside>
+
+  <div class="main">
+    <div class="topbar">Admin Control</div>
+    <div class="content">
+      
+      <!-- Dashboard -->
+      <section id="dashboard" class="card-section">
+        <div class="row">
+          <div class="card"><h3>Players</h3><p id="dashPlayers">0</p></div>
+          <div class="card"><h3>Tournaments</h3><p id="dashTournaments">0</p></div>
+          <div class="card"><h3>Matches</h3><p id="dashMatches">0</p></div>
+          <div class="card"><h3>Earnings</h3><p id="dashEarnings">$0</p></div>
+        </div>
+      </section>
+
+      <!-- Players -->
+      <section id="players" style="display:none">
+        <div class="card">
+          <h3>Add Player</h3>
+          <div class="row">
+            <input id="pName" placeholder="Player Name"/>
+            <input id="pWins" type="number" placeholder="Wins"/>
+            <input id="pRank" placeholder="Rank"/>
+            <input id="pTournaments" type="number" placeholder="Tournaments"/>
+          </div>
+          <button onclick="addPlayer()">Add Player</button>
+        </div>
+        <div class="card">
+          <h3>Player List</h3>
+          <div id="playerList"></div>
+        </div>
+      </section>
+
+      <!-- Tournaments -->
+      <section id="tournaments" style="display:none">
+        <div class="card">
+          <h3>Create Tournament</h3>
+          <div class="row">
+            <input id="tName" placeholder="Tournament Name"/>
+            <select id="tGame"><option value="">Select Game</option><option>Valorant</option><option>CS:GO</option><option>Free Fire</option><option>PUBG</option></select>
+            <input id="tFormat" placeholder="Format"/>
+            <input id="tMax" type="number" placeholder="Max Players"/>
+            <input id="tPrize" type="number" placeholder="Prize"/>
+            <input id="tEntry" type="number" placeholder="Entry Fee"/>
+            <input id="tDate" type="date"/><input id="tTime" type="time"/>
+          </div>
+          <button onclick="addTournament()">Add Tournament</button>
+        </div>
+        <div class="card">
+          <h3>Existing Tournaments</h3>
+          <div id="tournamentList"></div>
+        </div>
+      </section>
+
+      <!-- Schedule -->
+      <section id="schedule" style="display:none">
+        <div class="card">
+          <h3>Add Match</h3>
+          <div class="row"><input id="mTitle" placeholder="Match Title"/><input id="mTime" type="time"/></div>
+          <button onclick="addMatch()">Add Match</button>
+        </div>
+        <div class="card">
+          <h3>Match Schedule</h3>
+          <div id="matchList"></div>
+        </div>
+      </section>
+
+      <!-- Registrations -->
+      <section id="registrations" style="display:none">
+        <div class="card">
+          <h3>Registrations</h3>
+          <div id="registrationsList"></div>
+        </div>
+      </section>
+
+      <!-- Earnings -->
+      <section id="earnings" style="display:none">
+        <div class="card">
+          <h3>Update Earnings</h3>
+          <div class="row"><input id="earnTotal" type="number" placeholder="Total"/><input id="earnMonth" type="number" placeholder="This Month"/></div>
+          <button onclick="saveEarnings()">Save Earnings</button>
+        </div>
+      </section>
+
+    </div>
+  </div>
+
+<script>
+  // ---- Session Check ----
+  if(!localStorage.getItem('adminLoggedIn')) window.location='admin-login.html';
+  function logout(){ localStorage.removeItem('adminLoggedIn'); window.location='admin-login.html'; }
+
+  // ---- State ----
+  let players = JSON.parse(localStorage.getItem('players')||'[]');
+  let mvps = JSON.parse(localStorage.getItem('mvps')||'[]');
+  let tournaments = JSON.parse(localStorage.getItem('tournaments')||'[]');
+  let schedule = JSON.parse(localStorage.getItem('schedule')||'[]');
+  let earnings = JSON.parse(localStorage.getItem('earnings')||'{}');
+
+  // ---- Players ----
+  function addPlayer(){
+    const p = { name:pName.value.trim(), wins:pWins.value, rank:pRank.value.trim(), tournaments:pTournaments.value };
+    if(!p.name) return alert('Name required');
+    players.push(p); localStorage.setItem('players', JSON.stringify(players));
+    pName.value=''; pWins.value=''; pRank.value=''; pTournaments.value='';
+    renderPlayers(); updateDashboard();
+  }
+  function renderPlayers(){
+    const c = document.getElementById('playerList');
+    if(!players.length){ c.innerHTML='<div class="item">No players</div>'; return; }
+    c.innerHTML = players.map((p,i)=>`
+      <div class="item">
+        <div><div class="pill">${mvps.includes(p.name)?'🌟 MVP':'Player'}</div>
+        <div style="font-weight:800;margin-top:6px">${p.name}</div>
+        <div style="color:rgba(255,255,255,0.6)">${p.wins} wins • ${p.tournaments} tournaments • Rank: ${p.rank}</div></div>
+        <button onclick="editPlayer(${i})">Edit</button>
+        <button onclick="toggleMVP('${p.name}');renderPlayers()">MVP</button>
+        <button class="danger" onclick="deletePlayer(${i})">Delete</button>
+      </div>`).join('');
+  }
+  function toggleMVP(name){ mvps = mvps.includes(name)?mvps.filter(n=>n!==name):mvps.concat(name); localStorage.setItem('mvps', JSON.stringify(mvps)); }
+  function deletePlayer(i){ players.splice(i,1); localStorage.setItem('players', JSON.stringify(players)); renderPlayers(); updateDashboard(); }
+  function editPlayer(i){
+    const p = players[i];
+    const name = prompt("Name:", p.name) || p.name;
+    const wins = prompt("Wins:", p.wins) || p.wins;
+    const rank = prompt("Rank:", p.rank) || p.rank;
+    const t = prompt("Tournaments:", p.tournaments) || p.tournaments;
+    players[i] = {name,wins,rank,tournaments:t};
+    localStorage.setItem('players', JSON.stringify(players)); renderPlayers();
+  }
+
+  // ---- Tournaments ----
+  function addTournament(){
+    const t = { name:tName.value.trim(), game:tGame.value, format:tFormat.value, max:tMax.value, prize:tPrize.value, entry:tEntry.value, date:tDate.value, time:tTime.value };
+    if(!t.name||!t.game) return alert('Name & Game required');
+    tournaments.push(t); localStorage.setItem('tournaments', JSON.stringify(tournaments));
+    tName.value=''; tGame.value=''; tFormat.value=''; tMax.value=''; tPrize.value=''; tEntry.value=''; tDate.value=''; tTime.value='';
+    renderTournaments(); updateDashboard();
+  }
+  function renderTournaments(){
+    const c = document.getElementById('tournamentList');
+    if(!tournaments.length){ c.innerHTML='<div class="item">No tournaments</div>'; return; }
+    c.innerHTML = tournaments.map((t,i)=>`
+      <div class="item">
+        <div><div class="pill">Tournament</div>
+        <div style="font-weight:800;margin-top:6px">${t.name} <span style="color:rgba(255,255,255,0.6)">(${t.game})</span></div>
+        <div style="color:rgba(255,255,255,0.6)">${t.format} • Prize: $${t.prize} • ${t.date||''} ${t.time||''}</div></div>
+        <button onclick="editTournament(${i})">Edit</button>
+        <button class="danger" onclick="deleteTournament(${i})">Delete</button>
+      </div>`).join('');
+  }
+  function deleteTournament(i){ tournaments.splice(i,1); localStorage.setItem('tournaments', JSON.stringify(tournaments)); renderTournaments(); updateDashboard(); }
+  function editTournament(i){
+    const t = tournaments[i];
+    const name = prompt("Tournament Name:", t.name) || t.name;
+    const game = prompt("Game:", t.game) || t.game;
+    const format = prompt("Format:", t.format) || t.format;
+    const prize = prompt("Prize:", t.prize) || t.prize;
+    const entry = prompt("Entry Fee:", t.entry) || t.entry;
+    tournaments[i] = {name,game,format,prize,entry,date:t.date,time:t.time};
+    localStorage.setItem('tournaments', JSON.stringify(tournaments)); renderTournaments();
+  }
+
+  // ---- Schedule ----
+  function addMatch(){ schedule.push({title:mTitle.value,time:mTime.value}); localStorage.setItem('schedule', JSON.stringify(schedule)); mTitle.value=''; mTime.value=''; renderSchedule(); updateDashboard(); }
+  function renderSchedule(){ const c=document.getElementById('matchList'); if(!schedule.length){c.innerHTML='<div class="item">No matches</div>';return;} c.innerHTML=schedule.map((m,i)=>`<div class="item"><div><div class="pill">Match</div><div style="font-weight:800;margin-top:6px">${m.title}</div><div style="color:rgba(255,255,255,0.6)">${m.time}</div></div><button class="danger" onclick="deleteMatch(${i})">Delete</button></div>`).join(''); }
+  function deleteMatch(i){ schedule.splice(i,1); localStorage.setItem('schedule', JSON.stringify(schedule)); renderSchedule(); updateDashboard(); }
+
+  // ---- Earnings ----
+  function saveEarnings(){ earnings.total=Number(earnTotal.value||0); earnings.month=Number(earnMonth.value||0); localStorage.setItem('earnings', JSON.stringify(earnings)); updateDashboard(); alert('Earnings saved'); }
+
+  // ---- Registrations ----
+  function renderRegistrations(){
+    const regs = JSON.parse(localStorage.getItem('registrations')||'{}');
+    const c=document.getElementById('registrationsList');
+    const keys=Object.keys(regs);
+    if(!keys.length){ c.innerHTML='<div class="item">No registrations</div>'; return; }
+    c.innerHTML = keys.map(k=>{
+      const list=regs[k]||[];
+      return `<div class="card"><h3>${k}</h3>
+      <table><tr><th>#</th><th>Player</th><th>Team</th></tr>
+      ${list.map((r,i)=>`<tr><td>${i+1}</td><td>${r.playerName}</td><td>${r.teamName}</td></tr>`).join('')}</table></div>`;
+    }).join('');
+  }
+
+  // ---- Dashboard ----
+  function updateDashboard(){
+    document.getElementById('dashPlayers').innerText=players.length;
+    document.getElementById('dashTournaments').innerText=tournaments.length;
+    document.getElementById('dashMatches').innerText=schedule.length;
+    document.getElementById('dashEarnings').innerText='$'+(earnings.total||0);
+  }
+
+  // ---- Init ----
+  function init(){ players=JSON.parse(localStorage.getItem('players')||'[]'); mvps=JSON.parse(localStorage.getItem('mvps')||'[]'); tournaments=JSON.parse(localStorage.getItem('tournaments')||'[]'); schedule=JSON.parse(localStorage.getItem('schedule')||'[]'); earnings=JSON.parse(localStorage.getItem('earnings')||'{}'); renderPlayers(); renderTournaments(); renderSchedule(); renderRegistrations(); updateDashboard(); }
+  init();
+
+  // ---- Nav ----
+  function show(id){ document.querySelectorAll('section').forEach(s=>s.style.display='none'); document.getElementById(id).style.display='block'; document.querySelectorAll('.nav-link').forEach(n=>n.classList.remove('active')); document.querySelector(`.nav-link[onclick="show('${id}')"]`).classList.add('active'); }
+</script>
+</body>
+</html>

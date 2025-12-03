@@ -1,0 +1,101 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>Admin Login - Esports Arena</title>
+  <style>
+    body {
+      margin: 0;
+      font-family: "Segoe UI", Arial, sans-serif;
+      background: linear-gradient(135deg, #070914, #0b1220);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      height: 100vh;
+      color: #fff;
+    }
+
+    .login-box {
+      background: rgba(255, 255, 255, 0.04);
+      padding: 30px;
+      border-radius: 16px;
+      box-shadow: 0 6px 20px rgba(0, 0, 0, 0.5);
+      text-align: center;
+      width: 320px;
+    }
+
+    h1 {
+      margin: 0;
+      font-size: 1.8rem;
+      color: #38bdf8;
+    }
+
+    p {
+      font-size: 0.9rem;
+      color: #bbb;
+      margin-bottom: 20px;
+    }
+
+    input {
+      width: 100%;
+      padding: 12px;
+      margin: 8px 0;
+      border-radius: 8px;
+      border: 1px solid rgba(255, 255, 255, 0.1);
+      background: rgba(0, 0, 0, 0.3);
+      color: #fff;
+      font-size: 1rem;
+    }
+
+    button {
+      width: 100%;
+      padding: 12px;
+      background: linear-gradient(90deg, #7c3aed, #06b6d4);
+      border: none;
+      border-radius: 8px;
+      color: #041014;
+      font-weight: 900;
+      font-size: 1rem;
+      cursor: pointer;
+      margin-top: 12px;
+      transition: 0.2s;
+    }
+
+    button:hover {
+      opacity: 0.85;
+    }
+  </style>
+</head>
+
+<body>
+  <div class="login-box">
+    <h1>Esports Arena</h1>
+    <p>Your Battlefield for Esports Glory.</p>
+    <input id="adminId" placeholder="Admin ID" />
+    <input id="password" type="password" placeholder="Password" />
+    <button onclick="login()">Login</button>
+    <p style="margin-top: 15px; font-size: 0.8rem; color: #38bdf8; opacity: 0.8;">
+      <strong>Demo Access:</strong><br>
+      ID: admin <br>
+      Pass: Bhuux06
+    </p>
+    <a href="../../index.html"
+      style="display: block; margin-top: 15px; color: #64748b; text-decoration: none; font-size: 0.9rem;">← Back to
+      Portfolio</a>
+  </div>
+
+  <script>
+    function login() {
+      let id = document.getElementById('adminId').value.trim();
+      let pass = document.getElementById('password').value.trim();
+      if (id === "admin" && pass === "Bhuux06") {
+        localStorage.setItem('adminLoggedIn', 'true');
+        window.location = "admin-control.html";
+      } else alert("Invalid Admin ID or Password");
+    }
+  </script>
+</body>
+
+</html>

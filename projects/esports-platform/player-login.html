@@ -1,0 +1,122 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8"/>
+  <meta name="viewport" content="width=device-width,initial-scale=1"/>
+  <title>Esports Arena - Player Login</title>
+  <style>
+    html,body{margin:0;height:100%;overflow:hidden;font-family:Arial,Helvetica,sans-serif;background:#000;color:#fff;}
+    .stage{position:relative;min-height:100vh;display:flex;align-items:center;justify-content:center;overflow:hidden;}
+    canvas{position:fixed;inset:0;width:100%;height:100%;display:block;}
+
+    .card{position:relative;z-index:10;width:340px;max-width:calc(100% - 40px);padding:24px;border-radius:14px;
+      background:rgba(20,20,30,0.8);backdrop-filter:blur(6px);box-shadow:0 10px 40px rgba(0,0,0,0.7);
+      animation:popIn 0.5s ease;}
+    @keyframes popIn{from{transform:translateY(20px) scale(.95);opacity:0}to{transform:translateY(0) scale(1);opacity:1}}
+
+    .brand{font-size:22px;font-weight:900;background:linear-gradient(90deg,#ff6ec4,#7873f5);
+      -webkit-background-clip:text;-webkit-text-fill-color:transparent;margin-bottom:6px;}
+    .sub{font-size:13px;color:#9fb0cf;margin-bottom:12px;}
+
+    label{font-size:13px;color:#9fb0cf;display:block;margin:10px 0 4px;}
+    input{width:100%;padding:10px;border-radius:8px;border:1px solid rgba(255,255,255,0.1);
+      background:rgba(0,0,0,0.4);color:#fff;}
+    .meta{margin-top:12px;display:flex;justify-content:space-between;align-items:center;}
+    .remember{font-size:13px;color:#9fb0cf;display:flex;gap:6px;align-items:center;}
+    .btn{padding:10px 14px;border:none;border-radius:8px;font-weight:700;cursor:pointer;
+      background:linear-gradient(90deg,#7c3aed,#06b6d4);color:#fff;}
+    .ghost{background:transparent;border:1px solid rgba(255,255,255,0.2);color:#9fb0cf;padding:9px 14px;border-radius:8px;cursor:pointer;}
+
+    .banner{display:none;margin-top:8px;padding:8px;border-radius:6px;font-size:13px;}
+    .banner.show{display:block;}
+    .error{background:rgba(255,0,0,0.15);color:#ffaaaa;}
+    .success{background:rgba(0,255,100,0.15);color:#aef5d4;}
+
+    .shake{animation:shake 0.4s;}
+    @keyframes shake{0%,100%{transform:translateX(0)}20%{transform:translateX(-8px)}40%{transform:translateX(8px)}60%{transform:translateX(-6px)}80%{transform:translateX(4px)}}
+
+    .flash-red{position:fixed;inset:0;background:rgba(255,0,0,0.4);animation:flash 0.3s;z-index:50;}
+    @keyframes flash{from{opacity:.6}to{opacity:0}}
+    .pop-msg{position:fixed;top:20%;left:50%;transform:translateX(-50%) scale(.5);font-size:2rem;font-weight:900;
+      color:#ff4444;text-shadow:0 0 10px #f00,0 0 20px #f44;opacity:0;animation:popInMsg 0.6s forwards;z-index:60;}
+    @keyframes popInMsg{0%{opacity:0;transform:translateX(-50%) scale(.5)}40%{opacity:1;transform:translateX(-50%) scale(1.3)}100%{opacity:0;transform:translateX(-50%) scale(1)}}
+
+    /* Modal */
+    .modal-backdrop{position:fixed;inset:0;background:rgba(0,0,0,0.7);display:none;align-items:center;justify-content:center;z-index:100;}
+    .modal-backdrop.show{display:flex;animation:fadeIn .3s;}
+    @keyframes fadeIn{from{opacity:0}to{opacity:1}}
+    .modal{width:340px;background:rgba(30,30,50,0.95);padding:20px;border-radius:12px;box-shadow:0 10px 40px rgba(0,0,0,0.7);
+      animation:scaleIn .4s;}
+    @keyframes scaleIn{from{transform:scale(.8);opacity:0}to{transform:scale(1);opacity:1}}
+    .modal h3{margin-top:0;color:#38bdf8}
+    .modal input{margin-bottom:10px;}
+    .modal-actions{display:flex;justify-content:flex-end;gap:10px;margin-top:10px;}
+  </style>
+</head>
+<body>
+  <div class="stage">
+    <canvas id="bg"></canvas>
+    <canvas id="fx"></canvas>
+
+    <div class="card" id="card">
+      <div class="brand">Esports Arena</div>
+      <div class="sub">Login to enter the battlefield</div>
+      <div id="bannerError" class="banner error"></div>
+      <div id="bannerSuccess" class="banner success"></div>
+
+      <label>Email</label>
+      <input id="email" type="email" placeholder="you@mail.com">
+      <label>Password</label>
+      <input id="password" type="password" placeholder="••••••••">
+      <div class="meta">
+        <label class="remember"><input type="checkbox" id="remember"> Remember me</label>
+        <div style="display:flex;gap:8px;">
+          <button class="ghost" id="btnRegister">Register</button>
+          <button class="btn" id="btnLogin">Login</button>
+        </div>
+      </div>
+    </div>
+
+    <div class="modal-backdrop" id="modalRoot">
+      <div class="modal">
+        <h3>Register Player</h3>
+        <label>Username</label><input id="r_name" type="text">
+        <label>Email</label><input id="r_email" type="email">
+        <label>Password</label><input id="r_pass" type="password">
+        <div class="modal-actions">
+          <button class="ghost" id="r_cancel">Cancel</button>
+          <button class="btn" id="r_submit">Create</button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+<script>
+const playersKey='players_v1', activeKey='active_v1';
+function read(key,fb){try{return JSON.parse(localStorage.getItem(key))||fb}catch{return fb}}
+function write(k,v){localStorage.setItem(k,JSON.stringify(v))}
+function showError(msg){let e=document.getElementById('bannerError');e.textContent=msg;e.classList.add('show');document.getElementById('card').classList.add('shake');setTimeout(()=>document.getElementById('card').classList.remove('shake'),400);wrongFX();}
+function showSuccess(msg){let s=document.getElementById('bannerSuccess');s.textContent=msg;s.classList.add('show');confettiFX();}
+function login(){let email=document.getElementById('email').value.trim().toLowerCase();let pass=document.getElementById('password').value.trim();let players=read(playersKey,[]);let u=players.find(p=>p.email===email&&p.password===pass);if(u){write(activeKey,u);showSuccess('Welcome '+u.username);setTimeout(()=>location.href='index.html',1000);}else showError('Invalid email or password')}
+document.getElementById('btnLogin').onclick=login;
+
+// wrong pass FX
+function wrongFX(){let st=document.querySelector('.stage');let f=document.createElement('div');f.className='flash-red';st.appendChild(f);setTimeout(()=>f.remove(),300);let pop=document.createElement('div');pop.className='pop-msg';pop.textContent='ACCESS DENIED!';st.appendChild(pop);setTimeout(()=>pop.remove(),600)}
+
+// confetti
+function confettiFX(){let fx=document.getElementById('fx'),ctx=fx.getContext('2d');let parts=[];resize(fx);for(let i=0;i<60;i++){parts.push({x:fx.width/2,y:fx.height/3,vx:(Math.random()-0.5)*5,vy:Math.random()*-3-2,color:`hsl(${Math.random()*360},80%,60%)`,life:60})}function loop(){ctx.clearRect(0,0,fx.width,fx.height);parts.forEach(p=>{p.x+=p.vx;p.y+=p.vy;p.vy+=0.1;p.life--;ctx.fillStyle=p.color;ctx.fillRect(p.x,p.y,5,5)});parts=parts.filter(p=>p.life>0);if(parts.length)requestAnimationFrame(loop)}loop();}
+
+// register
+document.getElementById('btnRegister').onclick=()=>document.getElementById('modalRoot').classList.add('show');
+document.getElementById('r_cancel').onclick=()=>document.getElementById('modalRoot').classList.remove('show');
+document.getElementById('r_submit').onclick=()=>{let u=document.getElementById('r_name').value.trim();let e=document.getElementById('r_email').value.trim().toLowerCase();let p=document.getElementById('r_pass').value.trim();if(!u||!e||!p){showError('All fields required');return}let players=read(playersKey,[]);if(players.find(x=>x.email===e)){showError('Email exists');return}players.push({username:u,email:e,password:p});write(playersKey,players);document.getElementById('modalRoot').classList.remove('show');showSuccess('Account created')}
+
+// background shooting
+function resize(c){c.width=window.innerWidth;c.height=window.innerHeight}
+const bg=document.getElementById('bg'),ctx=bg.getContext('2d');resize(bg);window.onresize=()=>{resize(bg)}
+let tracers=[];function spawnTracer(){tracers.push({x:Math.random()*bg.width,y:Math.random()*bg.height/2+bg.height/4,vx:(Math.random()>0.5?1:-1)*(3+Math.random()*3),life:80,color:`hsl(${200+Math.random()*100},100%,70%)`})}
+setInterval(spawnTracer,700);
+function bgLoop(){ctx.fillStyle='rgba(0,0,0,0.25)';ctx.fillRect(0,0,bg.width,bg.height);tracers.forEach(t=>{t.x+=t.vx;t.life--;ctx.strokeStyle=t.color;ctx.beginPath();ctx.moveTo(t.x,t.y);ctx.lineTo(t.x-t.vx*3,t.y);ctx.stroke()});tracers=tracers.filter(t=>t.life>0);requestAnimationFrame(bgLoop)}bgLoop();
+</script>
+</body>
+</html>
